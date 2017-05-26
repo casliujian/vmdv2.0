@@ -1,8 +1,5 @@
 package vmdv.model;
 
-import vmdv.paint.graph.RGBColor;
-import vmdv.paint.graph.XYZ;
-
 public class Node {
 	private RGBColor oriColor = new RGBColor();
 	private double oriSize;

@@ -11,9 +11,9 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import vmdv.model.RGBColor;
 import vmdv.network.NetAgent;
 import vmdv.paint.graph.Edge;
-import vmdv.paint.graph.RGBColor;
 import vmdv.paint.graph.StateEdge;
 import vmdv.paint.graph.StateNode;
 

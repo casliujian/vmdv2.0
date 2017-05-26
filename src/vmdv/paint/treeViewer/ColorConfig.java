@@ -1,6 +1,6 @@
 package vmdv.paint.treeViewer;
 
-import vmdv.paint.graph.RGBColor;
+import vmdv.model.RGBColor;
 
 public interface ColorConfig {
 	public static final RGBColor red = new RGBColor(1,0,0);

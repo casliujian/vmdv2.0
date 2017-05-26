@@ -13,8 +13,8 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.LinkedList;
 
+import vmdv.model.RGBColor;
 import vmdv.network.NetAgent;
-import vmdv.paint.graph.RGBColor;
 import vmdv.paint.graph.Tree;
 import vmdv.paint.graph.TreeEdge;
 import vmdv.paint.graph.TreeNode;

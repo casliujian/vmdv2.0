@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import vmdv.paint.graph.RGBColor;
 import vmdv.paint.treeViewer.ColorConfig;
 
 public class Tree extends Graph {

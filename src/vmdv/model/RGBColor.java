@@ -1,4 +1,4 @@
-package vmdv.paint.graph;
+package vmdv.model;
 
 public class RGBColor {
 	private float red = 1.0f;

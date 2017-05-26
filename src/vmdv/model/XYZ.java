@@ -1,4 +1,4 @@
-package vmdv.paint.graph;
+package vmdv.model;
 
 public class XYZ {
 	private double x;

@@ -1,5 +1,7 @@
 package vmdv.paint.graph;
 
+import vmdv.model.RGBColor;
+
 public class StateEdge {
 	private StateNode pn;
 	private StateNode cn;

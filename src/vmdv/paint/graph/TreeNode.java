@@ -1,5 +1,8 @@
 package vmdv.paint.graph;
 
+import vmdv.model.RGBColor;
+import vmdv.model.XYZ;
+
 public class TreeNode {
 	private RGBColor oriColor = new RGBColor();
 	private double oriSize;

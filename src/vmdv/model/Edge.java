@@ -1,7 +1,5 @@
 package vmdv.model;
 
-import vmdv.paint.graph.RGBColor;
-
 public class Edge {
 	private Node pn;
 	private Node cn;

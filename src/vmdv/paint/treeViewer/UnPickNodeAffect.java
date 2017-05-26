@@ -2,12 +2,12 @@ package vmdv.paint.treeViewer;
 
 import com.jogamp.opengl.GLAutoDrawable;
 
-import vmdv.paint.graph.TreeNode;
+import vmdv.model.Node;
 
 public class UnPickNodeAffect implements AssistAffect {
-	private TreeNode node;
+	private Node node;
 	
-	public UnPickNodeAffect(TreeNode node) {
+	public UnPickNodeAffect(Node node) {
 		this.node = node;
 	}
 

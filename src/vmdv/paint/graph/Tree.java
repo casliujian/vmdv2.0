@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
 
+import vmdv.model.RGBColor;
+import vmdv.model.XYZ;
 import vmdv.paint.treeViewer.ColorConfig;
 
 public class Tree{

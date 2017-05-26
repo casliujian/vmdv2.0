@@ -1,5 +1,7 @@
 package vmdv.paint.graph;
 
+import vmdv.model.RGBColor;
+import vmdv.model.XYZ;
 import vmdv.paint.stateGraphViewer.StateGraphVisualizeListener;
 
 public class StateNode {

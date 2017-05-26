@@ -6,7 +6,7 @@ import java.util.Set;
 import vmdv.model.Edge;
 import vmdv.model.Node;
 import vmdv.model.Tree;
-import vmdv.paint.graph.XYZ;
+import vmdv.model.XYZ;
 
 public class ForceAtlas2Layout extends GraphLayout {
 	private float ka = 5f;

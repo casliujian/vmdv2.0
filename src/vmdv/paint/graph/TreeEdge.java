@@ -1,5 +1,7 @@
 package vmdv.paint.graph;
 
+import vmdv.model.RGBColor;
+
 public class TreeEdge {
 	private TreeNode pn;
 	private TreeNode cn;
