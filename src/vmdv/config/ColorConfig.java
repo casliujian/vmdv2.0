@@ -1,4 +1,4 @@
-package vmdv.paint.treeViewer;
+package vmdv.config;
 
 import vmdv.model.RGBColor;
 

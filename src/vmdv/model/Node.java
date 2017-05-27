@@ -1,8 +1,8 @@
 package vmdv.model;
 
 public class Node {
-	private RGBColor oriColor = new RGBColor();
-	private double oriSize;
+	protected RGBColor oriColor = new RGBColor();
+	protected double oriSize;
 	public boolean showChildLabel = false;
 	public String childLabel = "";
 

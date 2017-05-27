@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import vmdv.model.Edge;
+import vmdv.model.Graph;
 import vmdv.model.Node;
-import vmdv.model.Tree;
 import vmdv.model.XYZ;
 
 public class ForceAtlas2Layout extends GraphLayout {
@@ -13,12 +13,12 @@ public class ForceAtlas2Layout extends GraphLayout {
 	private float kr = 1f;
 
 	@Override
-	public void updateLayout(Tree tree) {
-		if(tree.getStart() == null) {
+	public void updateLayout(Graph graph) {
+		if(graph.getStart() == null) {
 			return;
 		}
 		//resistance force
-		Set<Node> tns = tree.getNodes();
+		Set<Node> tns = graph.getNodes();
 		LinkedList<Node> tmp_tns = new LinkedList<Node>();
 		synchronized(tns) {
 			for(Node tn : tns) {
@@ -49,7 +49,7 @@ public class ForceAtlas2Layout extends GraphLayout {
 		}
 		//attraction force
 		for(Node sn : tmp_tns) {
-			for(Edge te : tree.getPostEdges(sn)) {
+			for(Edge te : graph.getPostEdges(sn)) {
 				Node dn = te.getTo();
 				XYZ snp = sn.getXYZ();
 				XYZ dnp = dn.getXYZ();
@@ -76,7 +76,7 @@ public class ForceAtlas2Layout extends GraphLayout {
 //				System.out.println("Node force: "+force.getX()+", "+force.getY()+","+force.getZ());
 //				System.out.println("Node Position: "+(p.getX()+force.getX())+", "+(p.getY()+force.getY())+","+(p.getZ()+force.getZ()));
 		}
-		tree.getStart().setXYZ(0, 0, 0);
+		graph.getStart().setXYZ(0, 0, 0);
 	}
 
 }

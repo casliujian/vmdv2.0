@@ -52,8 +52,8 @@ public class MouseHandler implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		viewer.dragStartX = e.getX();
+		viewer.dragStartY = e.getY();
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package vmdv.paint.treeViewer;
 
 import com.jogamp.opengl.GLAutoDrawable;
 
+import vmdv.config.ColorConfig;
 import vmdv.model.Edge;
 import vmdv.model.Graph;
 import vmdv.model.Node;

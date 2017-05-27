@@ -1,4 +1,4 @@
-package vmdv.communicate;
+package vmdv.config;
 
 public interface ComConfig {
 

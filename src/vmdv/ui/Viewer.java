@@ -22,7 +22,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 import vmdv.model.Graph;
 import vmdv.model.Node;
-import vmdv.model.NodeState;
+import vmdv.model.NodeProperty;
 import vmdv.paint.treeViewer.AssistAffect;
 
 public class Viewer extends JFrame {
@@ -37,7 +37,7 @@ public class Viewer extends JFrame {
 	private MouseWheelListener mwListener;
 	private MouseMotionListener mmListener;
 	
-	private Graph graph;
+	protected Graph graph;
 	
 	protected double eyex = 0;
 	protected double eyey = 0;
@@ -53,11 +53,11 @@ public class Viewer extends JFrame {
 	
 	
 	protected Node hoverNode = null;
-	protected NodeState hoverNodeState = null;
+	protected NodeProperty hoverNodeState = null;
 	protected Node nodeSelected = null;
-	protected NodeState selectNodeState = null;
+	protected NodeProperty selectNodeState = null;
 	protected LinkedList<Node> multiNodesSelected = new LinkedList<Node>();
-	protected LinkedList<NodeState> multiNodesSelectedState = new LinkedList<NodeState>();
+	protected LinkedList<NodeProperty> multiNodesSelectedState = new LinkedList<NodeProperty>();
 	
 
 	
@@ -68,6 +68,8 @@ public class Viewer extends JFrame {
 		GLCapabilities glcaps = new GLCapabilities(glp);
 		glcaps.setDoubleBuffered(true);
 		this.renderPanel = new GLJPanel(glcaps);
+		this.backPop = new JPopupMenu();
+		this.nodePop = new JPopupMenu();
 //		glistener.
 //		this.renderPanel.addm
 	}
@@ -90,7 +92,7 @@ public class Viewer extends JFrame {
 	}
 	
 	public void registerGLHandler(GLEventHandler glistener) {
-		glistener.setGraph(this.getGraph());
+//		glistener.setGraph(this.getGraph());
 		glistener.glu = glu;
 		glistener.glut = glut;
 		glistener.setViewer(this);

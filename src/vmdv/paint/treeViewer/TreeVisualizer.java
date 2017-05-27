@@ -19,6 +19,7 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLJPanel;
 
+import vmdv.config.ColorConfig;
 import vmdv.dialogs.SearchByIdDlg;
 import vmdv.dialogs.SearchByTextDlg;
 import vmdv.dialogs.ShowTextDlg;

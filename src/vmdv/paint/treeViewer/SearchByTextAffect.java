@@ -2,6 +2,7 @@ package vmdv.paint.treeViewer;
 
 import java.util.LinkedList;
 
+import vmdv.config.ColorConfig;
 import vmdv.paint.graph.Tree;
 import vmdv.paint.graph.TreeNode;
 

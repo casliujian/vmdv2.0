@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.jogamp.opengl.GLAutoDrawable;
 
+import vmdv.config.ColorConfig;
 import vmdv.paint.graph.Tree;
 import vmdv.paint.graph.TreeNode;
 

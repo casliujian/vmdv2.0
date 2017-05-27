@@ -1,10 +1,10 @@
 package vmdv.model;
 
-public class NodeState {
+public class NodeProperty {
 	private RGBColor color;
 	private double size;
 	
-	public NodeState(RGBColor color, double size) {
+	public NodeProperty(RGBColor color, double size) {
 		this.color = color;
 		this.size = size;
 	}
@@ -21,6 +21,5 @@ public class NodeState {
 	public void setSize(double size) {
 		this.size = size;
 	}
-	
-	
+
 }

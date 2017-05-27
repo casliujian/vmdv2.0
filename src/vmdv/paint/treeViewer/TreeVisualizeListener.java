@@ -20,6 +20,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import vmdv.config.ColorConfig;
 import vmdv.model.RGBColor;
 import vmdv.network.NetAgent;
 import vmdv.paint.graph.TreeEdge;

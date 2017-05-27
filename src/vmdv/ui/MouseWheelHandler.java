@@ -11,7 +11,13 @@ public class MouseWheelHandler implements MouseWheelListener {
 	}
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		// TODO Auto-generated method stub
-
+		int step = e.getWheelRotation();
+		double current = Math.sqrt(Math.pow(viewer.eyex, 2) + Math.pow(viewer.eyey, 2) + Math.pow(viewer.eyez, 2));
+		if(current < 1.0 && step < 0) {
+			return;
+		}
+		viewer.eyex += viewer.eyex / current * step;
+		viewer.eyey += viewer.eyey / current * step;
+		viewer.eyez += viewer.eyez / current * step;
 	}
 }
