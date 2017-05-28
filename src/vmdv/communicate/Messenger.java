@@ -38,7 +38,6 @@ public class Messenger {
 						output.flush();
 					}
 				}
-				;
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {

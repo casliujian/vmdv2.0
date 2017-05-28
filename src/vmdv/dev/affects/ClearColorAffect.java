@@ -2,6 +2,7 @@ package vmdv.dev.affects;
 
 import java.util.LinkedList;
 
+import vmdv.communicate.UnPickNodeRequest;
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
 import vmdv.model.Edge;
@@ -10,12 +11,8 @@ import vmdv.ui.Viewer;
 
 public class ClearColorAffect extends AssistAffect {
 
-	public ClearColorAffect(Session session) {
-		super(session);
-	}
-
 	@Override
-	public void affect() {
+	public void affect(Session session) {
 		Viewer viewer = session.getViewer();
 		LinkedList<Node> looked = new LinkedList<Node>();
 		looked.addLast(viewer.getGraph().getStart());
@@ -25,7 +22,8 @@ public class ClearColorAffect extends AssistAffect {
 			n.clearColor();
 //			if(n.isPicked()) {
 				n.setPicked(false);
-				tv.operateListener.unHightLightState(n.getId());
+				session.addRequestMsg(new UnPickNodeRequest(session.getSid(), n.getId()));
+//				tv.operateListener.unHightLightState(n.getId());
 //			}
 			for(Edge e : viewer.getGraph().getPostEdges(n)) {
 				Node tn = e.getTo();
