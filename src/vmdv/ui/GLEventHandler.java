@@ -243,8 +243,10 @@ public class GLEventHandler implements GLEventListener {
 
 		// show color, label or else
 		if (!viewer.affect.isEmpty()) {
-			viewer.affect.removeFirst().affect(gld);
+			viewer.affect.removeFirst().affect(viewer.session);
 		}
+		
+		viewer.layout.updateLayout(viewer.graph);
 
 		// gl.glLoadIdentity();
 		// gl.glColor3f(0, 0, 0);

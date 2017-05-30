@@ -59,8 +59,8 @@ public class VMDV {
 		MouseWheelHandler mwh = new MouseWheelHandler();
 		treeViewer.registerMouseWheelHandler(mwh);
 		Tree tree = new Tree();
-		treeViewer.setGraph(tree);
-		Session session = new Session("s1", tree, treeViewer);
+//		treeViewer.setGraph(tree);
+		Session session = new Session("s1", tree, treeViewer, new ForceAtlas2Layout());
 //		Messenger messenger = new Messenger(null, null);
 		vmdv.addSession("s1", session);
 		

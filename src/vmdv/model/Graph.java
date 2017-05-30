@@ -34,6 +34,9 @@ public class Graph {
 		assert(tmp_n == null);
 		Node n = new Node(id, label);
 		Edges es = new Edges();
+		if(struct.isEmpty()) {
+			this.setStart(n);
+		}
 		struct.put(n, es);
 	}
 	

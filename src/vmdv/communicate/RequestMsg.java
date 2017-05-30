@@ -1,7 +1,7 @@
 package vmdv.communicate;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 public abstract class RequestMsg {
-	public abstract JSONArray to_json();
+	public abstract JSONObject to_json();
 }

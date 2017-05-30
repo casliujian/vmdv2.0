@@ -1,6 +1,6 @@
 package vmdv.communicate;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class UnPickNodeRequest extends RequestMsg {
 	private String sid;
@@ -12,9 +12,12 @@ public class UnPickNodeRequest extends RequestMsg {
 	}
 
 	@Override
-	public JSONArray to_json() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject to_json() {
+		JSONObject jo = new JSONObject();
+		jo.accumulate("type", "unpick_node");
+		jo.accumulate("session_id", this.sid);
+		jo.accumulate("node_id", this.nid);
+		return jo;
 	}
 
 }

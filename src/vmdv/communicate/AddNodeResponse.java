@@ -1,19 +1,21 @@
 package vmdv.communicate;
 
-import vmdv.control.Session;
-import vmdv.model.Graph;
+import vmdv.dev.AssistAffect;
+import vmdv.dev.affects.AddNodeAffect;
 
 public class AddNodeResponse extends ResponseMsg {
-	private String id;
+	private String nid;
 	private String label;
-	public AddNodeResponse(String id, String label) {
-		this.id = id;
+	public AddNodeResponse(String nid, String label) {
+		this.nid = nid;
 		this.label = label;
 	}
-
 	@Override
-	public void parse(Session session) {
-		Graph graph = session.getGraph();
-		graph.addNode(id, label);
+	public AssistAffect parse() {
+		
+		assert(nid != null && label != null);
+		
+		AddNodeAffect ana = new AddNodeAffect(nid, label);
+		return ana;
 	}
 }

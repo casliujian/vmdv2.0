@@ -61,7 +61,7 @@ public class Messenger {
 						JSONArray json = new JSONArray(str);
 						ResponseMsg rmsg = to_msg(json);
 						if (rmsg != null) {
-							sessions.get(sid).addResponseMsg(rmsg);
+							sessions.get(sid).parseResponseMsg(rmsg);
 						}
 					} catch (IOException e) {
 						e.printStackTrace();

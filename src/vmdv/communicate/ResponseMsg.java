@@ -1,7 +1,7 @@
 package vmdv.communicate;
 
-import vmdv.control.Session;
+import vmdv.dev.AssistAffect;
 
 public abstract class ResponseMsg {
-	public abstract void parse(Session session);
+	public abstract AssistAffect parse();
 }

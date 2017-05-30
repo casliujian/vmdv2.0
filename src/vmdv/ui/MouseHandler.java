@@ -3,9 +3,9 @@ package vmdv.ui;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import vmdv.dev.affects.PickNodeAffect;
+import vmdv.dev.affects.UnPickNodeAffect;
 import vmdv.model.Node;
-import vmdv.paint.treeViewer.PickNodeAffect;
-import vmdv.paint.treeViewer.UnPickNodeAffect;
 
 public class MouseHandler implements MouseListener {
 
@@ -32,7 +32,7 @@ public class MouseHandler implements MouseListener {
 				if(selected.isPicked()) {
 					viewer.affect.addLast(new UnPickNodeAffect(selected));
 				} else {
-					viewer.affect.addLast(new PickNodeAffect(viewer.getGraph(), selected));
+					viewer.affect.addLast(new PickNodeAffect(selected));
 				}
 			}
 		}

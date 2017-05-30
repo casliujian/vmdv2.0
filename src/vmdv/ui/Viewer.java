@@ -20,10 +20,12 @@ import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import vmdv.control.GraphLayout;
+import vmdv.control.Session;
+import vmdv.dev.AssistAffect;
 import vmdv.model.Graph;
 import vmdv.model.Node;
 import vmdv.model.NodeProperty;
-import vmdv.paint.treeViewer.AssistAffect;
 
 public class Viewer extends JFrame {
 	private GLU glu = new GLU();
@@ -46,7 +48,7 @@ public class Viewer extends JFrame {
 	protected double theta = 90; // 0--180
 	protected int dragStartX = 0;
 	protected int dragStartY = 0;
-	protected LinkedList<AssistAffect> affect = new LinkedList<AssistAffect>();
+	public LinkedList<AssistAffect> affect = new LinkedList<AssistAffect>();
 	protected boolean popupShowed = false;
 	protected Point mousePosition = null;
 	protected boolean singleSelection = true;
@@ -58,9 +60,8 @@ public class Viewer extends JFrame {
 	protected NodeProperty selectNodeState = null;
 	protected LinkedList<Node> multiNodesSelected = new LinkedList<Node>();
 	protected LinkedList<NodeProperty> multiNodesSelectedState = new LinkedList<NodeProperty>();
-	
-
-	
+	protected GraphLayout layout;
+	protected Session session;
 	
 	public Viewer(String title) {
 		this.setTitle(title);
@@ -72,6 +73,14 @@ public class Viewer extends JFrame {
 		this.nodePop = new JPopupMenu();
 //		glistener.
 //		this.renderPanel.addm
+	}
+	
+	public void setGraphLayout(GraphLayout layout) {
+		this.layout = layout;
+	}
+	
+	public void setSession(Session session) {
+		this.session = session;
 	}
 	
 	public void setEye(double x, double y, double z) {
@@ -149,11 +158,17 @@ public class Viewer extends JFrame {
 		return n;
 	}
 	
+	public void showView() {
+		this.setVisible(true);
+	}
+	
 	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
+
+
 
 }
