@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import vmdv.control.Session;
 
@@ -32,9 +33,9 @@ public class Messenger {
 		public void run() {
 			while (running) {
 				for (String sid : sessions.keySet()) {
-					RequestMsg rmsg = sessions.get(sid).takeRequestMsg();
-					if (rmsg != null) {
-						output.println(rmsg.to_json().toString());
+					JSONObject json = sessions.get(sid).takeRequestMsg();
+					if (json != null) {
+						output.println(json.toString());
 						output.flush();
 					}
 				}
@@ -58,7 +59,7 @@ public class Messenger {
 				for (String sid : sessions.keySet()) {
 					try {
 						String str = input.readLine();
-						JSONArray json = new JSONArray(str);
+						JSONObject json = new JSONObject(str);
 						ResponseMsg rmsg = to_msg(json);
 						if (rmsg != null) {
 							sessions.get(sid).parseResponseMsg(rmsg);
@@ -70,7 +71,14 @@ public class Messenger {
 			}
 		}
 
-		private ResponseMsg to_msg(JSONArray json) {
+		private ResponseMsg to_msg(JSONObject json) {
+			if(json != null) {
+				switch(json.get("type").toString()) {
+				case "add_node": 
+					
+					break;
+				}
+			}
 
 			return null;
 		}

@@ -22,7 +22,7 @@ public class ClearColorAffect extends AssistAffect {
 			n.clearColor();
 //			if(n.isPicked()) {
 				n.setPicked(false);
-				session.addRequestMsg(new UnPickNodeRequest(session.getSid(), n.getId()));
+				session.addRequestMsg(new UnPickNodeRequest(n.getId()));
 //				tv.operateListener.unHightLightState(n.getId());
 //			}
 			for(Edge e : viewer.getGraph().getPostEdges(n)) {

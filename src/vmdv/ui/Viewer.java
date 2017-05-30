@@ -1,6 +1,8 @@
 package vmdv.ui;
 
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,6 +12,7 @@ import java.nio.IntBuffer;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import com.jogamp.opengl.GL2;
@@ -23,6 +26,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import vmdv.control.GraphLayout;
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
+import vmdv.dev.PopupItem;
 import vmdv.model.Graph;
 import vmdv.model.Node;
 import vmdv.model.NodeProperty;
@@ -73,6 +77,40 @@ public class Viewer extends JFrame {
 		this.nodePop = new JPopupMenu();
 //		glistener.
 //		this.renderPanel.addm
+	}
+	
+	public void addBackgroundPopup(PopupItem pop) {
+		if(pop != null) {
+			JMenuItem item = new JMenuItem(pop.getLabel());
+			item.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pop.action(Viewer.this.session);
+				}
+				
+			});
+			this.backPop.add(item);
+		}
+	}
+	
+	public void addNodePopup(PopupItem pop) {
+		if(pop != null) {
+			JMenuItem item = new JMenuItem(pop.getLabel());
+			item.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pop.action(Viewer.this.session);
+				}
+				
+			});
+			this.nodePop.add(item);
+		}
+	}
+	
+	public Node getSelectedNode() {
+		return nodeSelected;
 	}
 	
 	public void setGraphLayout(GraphLayout layout) {

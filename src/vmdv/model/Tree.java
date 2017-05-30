@@ -9,6 +9,10 @@ import vmdv.config.ColorConfig;
 public class Tree extends Graph {
 	private int height = 0;
 	public HashMap<String, ArrayList<Node>> depthMap = new HashMap<String, ArrayList<Node>>();
+	
+	public Tree() {
+		this.struct = new HashMap<TreeNode, Edges>();
+	}
 
 
 	public void removeSubtree(String id) {

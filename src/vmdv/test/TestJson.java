@@ -12,6 +12,11 @@ public class TestJson {
 		json2.accumulate("hello2", "world2");
 		json.accumulate("hello_2", json2);
 		System.out.println(json.get("username"));
+//		json.accumulate("hello", "world");
+		if (!json.isNull("hello")) {
+			json.remove("hello");
+			json.accumulate("hello", "world3");
+		}
 		System.out.println(json.toString());
 	}
 

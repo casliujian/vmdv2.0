@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 import vmdv.communicate.Messenger;
+import vmdv.model.Graph;
 import vmdv.model.Tree;
 import vmdv.ui.GLEventHandler;
 import vmdv.ui.KeyHandler;
@@ -18,6 +19,7 @@ import vmdv.ui.MouseWheelHandler;
 import vmdv.ui.Viewer;
 
 public class VMDV {
+	private Messenger messenger;
 	private HashMap<String, Session> sessions = new HashMap<String, Session>();
 	
 	public VMDV() {
@@ -26,12 +28,15 @@ public class VMDV {
 			Socket s = ss.accept();
 			BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			PrintWriter output = new PrintWriter(s.getOutputStream());
-			Messenger messenger = new Messenger(input, output, sessions);
-			messenger.startSendingReceiving();
+			this.messenger = new Messenger(input, output, sessions);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void startMessenger() {
+		messenger.startSendingReceiving();
 	}
 	
 	public void addSession(String vid, Session session) {
@@ -63,6 +68,20 @@ public class VMDV {
 		Session session = new Session("s1", tree, treeViewer, new ForceAtlas2Layout());
 //		Messenger messenger = new Messenger(null, null);
 		vmdv.addSession("s1", session);
+		session.start();
+		
+		Viewer stateViewer = new Viewer("State Graph");
+		stateViewer.registerGLHandler(new GLEventHandler());
+		stateViewer.registerKeyHandler(new KeyHandler());
+		stateViewer.registerMouseHandler(new MouseHandler());
+		stateViewer.registerMouseMotionHandler(new MouseMotionHandler());
+		stateViewer.registerMouseWheelHandler(new MouseWheelHandler());
+		Graph graph = new Graph();
+		Session session2 = new Session("s2", graph, stateViewer, new ForceAtlas2Layout());
+		vmdv.addSession("s2", session2);
+		session2.start();
+		
+		vmdv.startMessenger();
 		
 	}
 

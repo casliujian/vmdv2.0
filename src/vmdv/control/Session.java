@@ -3,6 +3,8 @@ package vmdv.control;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.json.JSONObject;
+
 import vmdv.communicate.RequestMsg;
 import vmdv.communicate.ResponseMsg;
 import vmdv.dev.AssistAffect;
@@ -14,7 +16,7 @@ public class Session {
 	private Viewer viewer;
 	private Graph graph;
 	private GraphLayout layout;
-	private BlockingQueue<RequestMsg> requests = new LinkedBlockingQueue<RequestMsg>();
+	private BlockingQueue<JSONObject> requests = new LinkedBlockingQueue<JSONObject>();
 //	private Queue<ResponseMsg> responses = new ConcurrentLinkedQueue<ResponseMsg>();
 
 	public Session(String sid, Graph graph, Viewer viewer, GraphLayout layout) {
@@ -83,11 +85,10 @@ public class Session {
 		}
 	}
 
-	public RequestMsg takeRequestMsg() {
+	public JSONObject takeRequestMsg() {
 		try {
 			return requests.take();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -95,7 +96,10 @@ public class Session {
 
 	public void addRequestMsg(RequestMsg rmsg) {
 		if (rmsg != null) {
-			requests.add(rmsg);
+			JSONObject json = rmsg.to_json();
+			json.remove("session_id");
+			json.accumulate("session_id", this.sid);
+			requests.add(json);
 		}
 	}
 
