@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 import vmdv.communicate.Messenger;
-import vmdv.model.Graph;
+import vmdv.model.DiGraph;
 import vmdv.model.Tree;
 import vmdv.ui.GLEventHandler;
 import vmdv.ui.KeyHandler;
@@ -76,7 +76,7 @@ public class VMDV {
 		stateViewer.registerMouseHandler(new MouseHandler());
 		stateViewer.registerMouseMotionHandler(new MouseMotionHandler());
 		stateViewer.registerMouseWheelHandler(new MouseWheelHandler());
-		Graph graph = new Graph();
+		DiGraph graph = new DiGraph();
 		Session session2 = new Session("s2", graph, stateViewer, new ForceAtlas2Layout());
 		vmdv.addSession("s2", session2);
 		session2.start();

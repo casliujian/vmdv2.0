@@ -3,7 +3,7 @@ package vmdv.dev.popup;
 import vmdv.control.Session;
 import vmdv.dev.PopupItem;
 import vmdv.dev.affects.ShowNodeInfoAffect;
-import vmdv.model.Node;
+import vmdv.model.AbstractNode;
 
 public class ShowNodeInfoPopup extends PopupItem {
 
@@ -13,7 +13,7 @@ public class ShowNodeInfoPopup extends PopupItem {
 
 	@Override
 	public void action(Session session) {
-		Node n = session.getViewer().getSelectedNode();
+		AbstractNode n = session.getViewer().getSelectedNode();
 //		if(n == null) {
 //			return;
 //		}

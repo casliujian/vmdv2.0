@@ -8,18 +8,19 @@ import org.json.JSONObject;
 import vmdv.communicate.RequestMsg;
 import vmdv.communicate.ResponseMsg;
 import vmdv.dev.AssistAffect;
+import vmdv.model.AbstractGraph;
 import vmdv.model.Graph;
 import vmdv.ui.Viewer;
 
 public class Session {
 	private String sid;
 	private Viewer viewer;
-	private Graph graph;
+	private AbstractGraph graph;
 	private GraphLayout layout;
 	private BlockingQueue<JSONObject> requests = new LinkedBlockingQueue<JSONObject>();
 //	private Queue<ResponseMsg> responses = new ConcurrentLinkedQueue<ResponseMsg>();
 
-	public Session(String sid, Graph graph, Viewer viewer, GraphLayout layout) {
+	public Session(String sid, AbstractGraph graph, Viewer viewer, GraphLayout layout) {
 		this.sid = sid;
 		this.graph = graph;
 		this.viewer = viewer;
@@ -50,7 +51,7 @@ public class Session {
 		this.viewer = viewer;
 	}
 
-	public Graph getGraph() {
+	public AbstractGraph getGraph() {
 		return graph;
 	}
 

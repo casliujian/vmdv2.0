@@ -27,7 +27,8 @@ import vmdv.control.GraphLayout;
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
 import vmdv.dev.PopupItem;
-import vmdv.model.Graph;
+import vmdv.model.AbstractGraph;
+import vmdv.model.AbstractNode;
 import vmdv.model.Node;
 import vmdv.model.NodeProperty;
 
@@ -43,7 +44,7 @@ public class Viewer extends JFrame {
 	private MouseWheelListener mwListener;
 	private MouseMotionListener mmListener;
 	
-	protected Graph graph;
+	protected AbstractGraph graph;
 	
 	protected double eyex = 0;
 	protected double eyey = 0;
@@ -58,9 +59,9 @@ public class Viewer extends JFrame {
 	protected boolean singleSelection = true;
 	
 	
-	protected Node hoverNode = null;
+	protected AbstractNode hoverNode = null;
 	protected NodeProperty hoverNodeState = null;
-	protected Node nodeSelected = null;
+	protected AbstractNode nodeSelected = null;
 	protected NodeProperty selectNodeState = null;
 	protected LinkedList<Node> multiNodesSelected = new LinkedList<Node>();
 	protected LinkedList<NodeProperty> multiNodesSelectedState = new LinkedList<NodeProperty>();
@@ -109,7 +110,7 @@ public class Viewer extends JFrame {
 		}
 	}
 	
-	public Node getSelectedNode() {
+	public AbstractNode getSelectedNode() {
 		return nodeSelected;
 	}
 	
@@ -127,10 +128,10 @@ public class Viewer extends JFrame {
 		eyez = z;
 	}
 	
-	public Graph getGraph() {
+	public AbstractGraph getGraph() {
 		return graph;
 	}
-	public void setGraph(Graph graph) {
+	public void setGraph(AbstractGraph graph) {
 		this.graph = graph;
 	}
 
@@ -171,7 +172,7 @@ public class Viewer extends JFrame {
 		renderPanel.addMouseWheelListener(mwHandler);
 	}
 	
-	protected Node selectNode(GL2 gl, Point p) {
+	protected AbstractNode selectNode(GL2 gl, Point p) {
 		if (p == null) {
 			return null;
 		}
@@ -192,7 +193,7 @@ public class Viewer extends JFrame {
 		glu.gluUnProject(x, y, z, modelview, projection, viewport, objxyz);
 		// System.out.println("x, y, z:"+objxyz.get(0)+", "+objxyz.get(1)+",
 		// "+objxyz.get(2));
-		Node n = graph.getNearestNode(objxyz.get(0), objxyz.get(1), objxyz.get(2));
+		AbstractNode n = graph.getNearestNode(objxyz.get(0), objxyz.get(1), objxyz.get(2));
 		return n;
 	}
 	

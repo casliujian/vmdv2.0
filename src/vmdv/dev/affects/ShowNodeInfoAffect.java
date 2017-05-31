@@ -4,12 +4,12 @@ import javax.swing.JOptionPane;
 
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
-import vmdv.model.Node;
+import vmdv.model.AbstractNode;
 
 public class ShowNodeInfoAffect extends AssistAffect {
-	private Node node;
+	private AbstractNode node;
 
-	public ShowNodeInfoAffect(Node node) {
+	public ShowNodeInfoAffect(AbstractNode node) {
 		this.node = node;
 	}
 
@@ -19,7 +19,7 @@ public class ShowNodeInfoAffect extends AssistAffect {
 			JOptionPane.showMessageDialog(session.getViewer(), "No node selected!", "Warning",
 					JOptionPane.WARNING_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(session.getViewer(), node.getLabel(), "Node " + node.getId(),
+			JOptionPane.showMessageDialog(session.getViewer(), node.label, "Node " + node.id,
 					JOptionPane.PLAIN_MESSAGE);
 		}
 	}

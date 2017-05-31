@@ -5,7 +5,7 @@ import java.awt.event.MouseListener;
 
 import vmdv.dev.affects.PickNodeAffect;
 import vmdv.dev.affects.UnPickNodeAffect;
-import vmdv.model.Node;
+import vmdv.model.AbstractNode;
 
 public class MouseHandler implements MouseListener {
 
@@ -18,7 +18,7 @@ public class MouseHandler implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		viewer.mousePosition = e.getPoint();
-		Node selected = viewer.hoverNode;
+		AbstractNode selected = viewer.hoverNode;
 		if (e.isMetaDown()) {//right click the mouse
 			viewer.popupShowed = true;
 			if(selected != null) {//showing node popup menu
@@ -29,7 +29,7 @@ public class MouseHandler implements MouseListener {
 		} else {//left click the mouse
 			viewer.popupShowed = false;
 			if(selected != null) {
-				if(selected.isPicked()) {
+				if(selected.picked) {
 					viewer.affect.addLast(new UnPickNodeAffect(selected));
 				} else {
 					viewer.affect.addLast(new PickNodeAffect(selected));

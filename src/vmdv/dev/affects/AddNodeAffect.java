@@ -2,7 +2,7 @@ package vmdv.dev.affects;
 
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
-import vmdv.model.Graph;
+import vmdv.model.AbstractGraph;
 
 public class AddNodeAffect extends AssistAffect {
 	
@@ -16,7 +16,7 @@ public class AddNodeAffect extends AssistAffect {
 
 	@Override
 	public void affect(Session session) {
-		Graph graph = session.getGraph();
+		AbstractGraph graph = session.getGraph();
 		graph.addNode(nid, label);
 	}
 

@@ -1,7 +1,7 @@
 package vmdv.control;
 
-import vmdv.model.Graph;
+import vmdv.model.AbstractGraph;
 
 public abstract class GraphLayout {	
-	public abstract void updateLayout(Graph graph);
+	public abstract void updateLayout(AbstractGraph graph);
 }
