@@ -2,11 +2,17 @@ package vmdv.model;
 
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import vmdv.config.GraphConfig.GraphType;
+import vmdv.dev.AssistAffect;
+
 public abstract class AbstractGraph {
+	public abstract GraphType getType();
 	public abstract AbstractNode getStart();
 	public abstract Set<AbstractNode> getSuccessors(String id);
 	public abstract Set<AbstractNode> getSuccessors(AbstractNode an);
@@ -22,5 +28,6 @@ public abstract class AbstractGraph {
 	public abstract AbstractNode getNearestNode(double x, double y, double z);
 	public abstract void clearColor();
 	public abstract void render(GL2 gl, GLUT glut, TextRenderer tr);
+	public abstract AssistAffect parseJSON(JSONObject json);
 
 }

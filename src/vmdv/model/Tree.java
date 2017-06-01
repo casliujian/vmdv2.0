@@ -6,11 +6,16 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import vmdv.config.ColorConfig;
+import vmdv.config.GraphConfig;
+import vmdv.config.GraphConfig.GraphType;
+import vmdv.dev.AssistAffect;
 
 public class Tree extends AbstractGraph {
 	private int height = 0;
@@ -151,6 +156,18 @@ public class Tree extends AbstractGraph {
 		assert(tmp_n == null); // make sure the added node does not exists
 								// before
 		TreeNode tn = new TreeNode(id, label);
+		TreeEdges tes = new TreeEdges();
+		if (struct.isEmpty()) {
+			root = tn;
+		}
+		struct.put(tn, tes);
+	}
+	
+	public void addNode(String id, String label, int proofState) {
+		TreeNode tmp_n = (TreeNode) getNode(id);
+		assert(tmp_n == null); // make sure the added node does not exists
+								// before
+		TreeNode tn = new TreeNode(id, label, proofState);
 		TreeEdges tes = new TreeEdges();
 		if (struct.isEmpty()) {
 			root = tn;
@@ -325,6 +342,18 @@ public class Tree extends AbstractGraph {
 		Set<AbstractNode> preds = new HashSet<AbstractNode>();
 		preds.add(parent((TreeNode)an));
 		return preds;
+	}
+
+	@Override
+	public GraphType getType() {
+		return GraphConfig.GraphType.TREE;
+	}
+
+	@Override
+	public AssistAffect parseJSON(JSONObject json) {
+		// TODO Auto-generated method stub
+		not finished.
+		return null;
 	}
 }
 

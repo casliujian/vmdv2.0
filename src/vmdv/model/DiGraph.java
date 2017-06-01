@@ -8,6 +8,8 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import vmdv.config.GraphConfig.GraphType;
+
 public class DiGraph extends AbstractGraph {
 	private HashMap<DiNode, DiEdges> struct = new HashMap<DiNode, DiEdges>();
 
@@ -186,6 +188,11 @@ public class DiGraph extends AbstractGraph {
 	public Set<AbstractNode> getPredecessors(AbstractNode an) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public GraphType getType() {
+		return GraphType.DIGRAPH;
 	}
 
 }

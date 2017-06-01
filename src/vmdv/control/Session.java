@@ -76,11 +76,11 @@ public class Session {
 //
 //	}
 
-	public void parseResponseMsg(ResponseMsg rmsg) {
+	public void parseResponseMsg(JSONObject rmsg) {
 //		if (rmsg != null) {
 //			responses.add(rmsg);
 //		}
-		AssistAffect affect = rmsg.parse();
+		AssistAffect affect = graph.parseJSON(rmsg);
 		if (affect != null) {
 			viewer.affect.addLast(affect);
 		}
