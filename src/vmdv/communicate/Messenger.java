@@ -7,8 +7,6 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
-import vmdv.config.GraphConfig;
-import vmdv.config.GraphConfig.GraphType;
 import vmdv.control.Session;
 
 public class Messenger {

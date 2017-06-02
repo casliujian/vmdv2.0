@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import vmdv.config.GraphConfig.GraphType;
+import vmdv.dev.AssistAffect;
 
 public class DiGraph extends AbstractGraph {
 	private HashMap<DiNode, DiEdges> struct = new HashMap<DiNode, DiEdges>();
@@ -193,6 +196,12 @@ public class DiGraph extends AbstractGraph {
 	@Override
 	public GraphType getType() {
 		return GraphType.DIGRAPH;
+	}
+
+	@Override
+	public AssistAffect parseJSON(JSONObject json) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
