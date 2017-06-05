@@ -16,6 +16,9 @@ import vmdv.config.ColorConfig;
 import vmdv.config.GraphConfig;
 import vmdv.config.GraphConfig.GraphType;
 import vmdv.dev.AssistAffect;
+import vmdv.dev.affects.AddEdgeAffect;
+import vmdv.dev.affects.AddNodeAffect;
+import vmdv.dev.affects.PickNodeAffect;
 
 public class Tree extends AbstractGraph {
 	private int height = 0;
@@ -117,43 +120,43 @@ public class Tree extends AbstractGraph {
 	public Set<TreeNode> getTreeNodes() {
 		return struct.keySet();
 	}
-	
+
 	@Override
 	public Set<AbstractNode> getNodes() {
 		Set<AbstractNode> nodes = new HashSet<AbstractNode>();
-		for(TreeNode tn: getTreeNodes()) {
+		for (TreeNode tn : getTreeNodes()) {
 			nodes.add(tn);
 		}
 		return nodes;
 	}
-	
+
 	public Set<TreeNode> children(TreeNode tn) {
 		Set<TreeNode> children_nodes = new HashSet<TreeNode>();
-		for(TreeEdge te: struct.get(tn).posts) {
+		for (TreeEdge te : struct.get(tn).posts) {
 			children_nodes.add(te.to);
 		}
 		return children_nodes;
 	}
-	
+
 	public Set<TreeNode> children(String id) {
 		TreeNode tn = (TreeNode) getNode(id);
-		assert(tn != null);
+		assert (tn != null);
 		return children(tn);
 	}
-	
+
 	public TreeNode parent(TreeNode tn) {
-		assert(tn != null);
+		assert (tn != null);
 		return struct.get(tn).pre.from;
 	}
-	
+
 	public TreeNode parent(String id) {
-		return parent((TreeNode)getNode(id));
+		return parent((TreeNode) getNode(id));
 	}
 
 	@Override
 	public void addNode(String id, String label) {
 		TreeNode tmp_n = (TreeNode) getNode(id);
-		assert(tmp_n == null); // make sure the added node does not exists
+		assert (tmp_n == null); // make sure the added node does not exists
 								// before
 		TreeNode tn = new TreeNode(id, label);
 		TreeEdges tes = new TreeEdges();
@@ -162,10 +165,10 @@ public class Tree extends AbstractGraph {
 		}
 		struct.put(tn, tes);
 	}
-	
-	public void addNode(String id, String label, int proofState) {
+
+	public void addNode(String id, String label, String proofState) {
 		TreeNode tmp_n = (TreeNode) getNode(id);
-		assert(tmp_n == null); // make sure the added node does not exists
+		assert (tmp_n == null); // make sure the added node does not exists
 								// before
 		TreeNode tn = new TreeNode(id, label, proofState);
 		TreeEdges tes = new TreeEdges();
@@ -181,11 +184,29 @@ public class Tree extends AbstractGraph {
 		TreeNode fn = (TreeNode) getNode(fromId);
 		TreeNode tn = (TreeNode) getNode(toId);
 		// make sure both nodes of the added edge exist
-		assert(fn != null && tn != null);
-		TreeEdge te = new TreeEdge(fn, tn);
+		assert (fn != null && tn != null);
+		TreeEdge te = new TreeEdge(fn, tn, null);
 		struct.get(fn).posts.add(te);
 		struct.get(tn).pre = te;
-		
+
+		int fnDepth = fn.depth;
+		tn.depth = fnDepth + 1;
+		if (height < fnDepth + 1) {
+			height = fnDepth + 1;
+		}
+		updateDepthColor();
+	}
+	
+	public void addEdge(String fromId, String toId, String label) {
+		// super.addEdge(fromId, toId);
+		TreeNode fn = (TreeNode) getNode(fromId);
+		TreeNode tn = (TreeNode) getNode(toId);
+		// make sure both nodes of the added edge exist
+		assert (fn != null && tn != null);
+		TreeEdge te = new TreeEdge(fn, tn, label);
+		struct.get(fn).posts.add(te);
+		struct.get(tn).pre = te;
+
 		int fnDepth = fn.depth;
 		tn.depth = fnDepth + 1;
 		if (height < fnDepth + 1) {
@@ -197,7 +218,7 @@ public class Tree extends AbstractGraph {
 	@Override
 	public void removeNode(String id) {
 		TreeNode tn = (TreeNode) getNode(id);
-		if(tn == null) {
+		if (tn == null) {
 			return;
 		}
 		removeNode(tn);
@@ -207,8 +228,8 @@ public class Tree extends AbstractGraph {
 	public void removeEdge(String fromId, String toId) {
 		TreeNode fn = (TreeNode) getNode(fromId);
 		TreeNode tn = (TreeNode) getNode(toId);
-		assert(fn != null && tn != null);
-//		TreeEdge te = struct.get(tn).pre;
+		assert (fn != null && tn != null);
+		// TreeEdge te = struct.get(tn).pre;
 		removeNode(tn);
 	}
 
@@ -216,21 +237,22 @@ public class Tree extends AbstractGraph {
 	public AbstractNode getNearestNode(double x, double y, double z) {
 		double dist = 0.25;
 		TreeNode rn = null;
-		
-		for (TreeNode n: struct.keySet()) {
-			double tmp_dist = Math.sqrt(Math.pow(n.xyz.getX()-x, 2)+Math.pow(n.xyz.getY()-y, 2)+Math.pow(n.xyz.getZ()-z, 2));
-			if(tmp_dist <= dist) {
+
+		for (TreeNode n : struct.keySet()) {
+			double tmp_dist = Math.sqrt(
+					Math.pow(n.xyz.getX() - x, 2) + Math.pow(n.xyz.getY() - y, 2) + Math.pow(n.xyz.getZ() - z, 2));
+			if (tmp_dist <= dist) {
 				rn = n;
 				break;
 			}
 		}
-		
+
 		return rn;
 	}
 
 	@Override
 	public void clearColor() {
-		for(TreeNode tn: struct.keySet()) {
+		for (TreeNode tn : struct.keySet()) {
 			tn.clearColor();
 		}
 	}
@@ -315,7 +337,7 @@ public class Tree extends AbstractGraph {
 	@Override
 	public Set<AbstractNode> getSuccessors(String id) {
 		Set<AbstractNode> succs = new HashSet<AbstractNode>();
-		for(TreeNode tn : children(id)) {
+		for (TreeNode tn : children(id)) {
 			succs.add(tn);
 		}
 		return succs;
@@ -331,7 +353,7 @@ public class Tree extends AbstractGraph {
 	@Override
 	public Set<AbstractNode> getSuccessors(AbstractNode an) {
 		Set<AbstractNode> succs = new HashSet<AbstractNode>();
-		for(TreeNode tn : children((TreeNode)an)) {
+		for (TreeNode tn : children((TreeNode) an)) {
 			succs.add(tn);
 		}
 		return succs;
@@ -340,7 +362,7 @@ public class Tree extends AbstractGraph {
 	@Override
 	public Set<AbstractNode> getPredecessors(AbstractNode an) {
 		Set<AbstractNode> preds = new HashSet<AbstractNode>();
-		preds.add(parent((TreeNode)an));
+		preds.add(parent((TreeNode) an));
 		return preds;
 	}
 
@@ -351,8 +373,21 @@ public class Tree extends AbstractGraph {
 
 	@Override
 	public AssistAffect parseJSON(JSONObject json) {
-		// TODO Auto-generated method stub
-		not finished.
+		switch (json.getString("type")) {
+		case "add_node": {
+			JSONObject json_node = json.getJSONObject("node");
+			return new AddNodeAffect(json_node.getString("id"), json_node.getString("label"), json_node.getString("state"));
+//			break;
+		}
+		case "add_edge": {
+			return new AddEdgeAffect(json.getString("from_id"), json.getString("to_id"), json.getString("label"));
+		}
+		case "highlight_node": {
+			return new PickNodeAffect(getNode(json.getString("node_id")));
+		}
+		default:
+			System.out.println("Message type not known: "+json.getString("type"));
+		}
 		return null;
 	}
 }

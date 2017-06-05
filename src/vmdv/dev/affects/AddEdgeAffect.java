@@ -7,10 +7,12 @@ import vmdv.model.AbstractGraph;
 public class AddEdgeAffect extends AssistAffect {
 	private String fromId;
 	private String toId;
+	private String label;
 	
-	public AddEdgeAffect(String fromId, String toId) {
+	public AddEdgeAffect(String fromId, String toId, String label) {
 		this.fromId = fromId;
 		this.toId = toId;
+		this.label = label;
 	}
 
 	@Override

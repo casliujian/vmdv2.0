@@ -14,7 +14,8 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```json
   {
     "type": "create_session",
-    "session_name": string,
+    "session_id": string,
+    "session_descr": string,
     "graph_type": string
   }
   ```
@@ -26,7 +27,7 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```json
   {
     "type": "remove_session",
-    "session_name": string
+    "session_id": string
   }
   ```
 
@@ -36,6 +37,7 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```json
   {
     "type": "add_node",
+    "session_id": string,
     "node":
       {
   		"id": string,
@@ -51,6 +53,7 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```json
   {
     "type": "add_edge",
+    "session_id": string,
     "from_id": string,
     "to_id": string,
     "label": string
@@ -63,6 +66,7 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```json
   {
     "type": "change_node_state",
+    "session_id": string,
     "node_id": string
   }
   ```
@@ -72,6 +76,7 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```json
   {
     "type": "highlight_node",
+    "session_id": string,
     "node_id": string
   }
   ```
@@ -83,6 +88,7 @@ Feedback (vmdv —> proof systems):
 ```json
 {
   "type": "feedback",
+  "session_id": string,
   "status": "OK"
 }
 ```
@@ -92,6 +98,7 @@ or
 ```json
 {
   "type": "feedback",
+  "session_id": string,
   "status": "Fail",
   "error_msg": string
 }

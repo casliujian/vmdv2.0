@@ -3,7 +3,7 @@ package vmdv.model;
 public class TreeNode extends AbstractNode {
 	public boolean showSubtree = true;
 	public int depth;
-	public int nodeState;
+	public String nodeState;
 	
 	public boolean showChildLabel = false;
 	public String childLabel = "";
@@ -12,7 +12,7 @@ public class TreeNode extends AbstractNode {
 		super(id, label);
 	}
 	
-	public TreeNode(String id, String label, int nodeState) {
+	public TreeNode(String id, String label, String nodeState) {
 		super(id, label);
 		this.nodeState = nodeState;
 	}
