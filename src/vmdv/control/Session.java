@@ -79,14 +79,29 @@ public class Session {
 //
 //	}
 
-	public void parseResponseMsg(JSONObject rmsg) {
+	public void parseResponseMsg(JSONObject json) {
 //		if (rmsg != null) {
 //			responses.add(rmsg);
 //		}
-		AssistAffect affect = graph.parseJSON(rmsg);
-		if (affect != null) {
-			viewer.affect.addLast(affect);
+		switch(json.getString("type")) {
+		case "feedback":
+			switch(json.getString("status")) {
+			case "OK":
+				System.out.println("feedback received: OK");
+				break;
+			case "Fail":
+				System.out.println("feedback received: Fail \n"+(json.getString("error_msg")));
+			default:
+				System.out.println("unknown feedback received");
+			}
+		case 
+		default:	
+			AssistAffect affect = graph.parseJSON(json);
+			if (affect != null) {
+				viewer.affect.addLast(affect);
+			}
 		}
+		
 	}
 
 
