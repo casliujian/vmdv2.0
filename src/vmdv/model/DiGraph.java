@@ -12,50 +12,120 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 import vmdv.config.GraphConfig.GraphType;
 import vmdv.dev.AssistAffect;
+import vmdv.dev.affects.AddEdgeAffect;
+import vmdv.dev.affects.AddNodeAffect;
+import vmdv.dev.affects.PickNodeAffect;
+import vmdv.dev.affects.RemoveEdgeAffect;
+import vmdv.dev.affects.RemoveNodeAffect;
 
 public class DiGraph extends AbstractGraph {
 	private HashMap<DiNode, DiEdges> struct = new HashMap<DiNode, DiEdges>();
-
+	private DiNode start = null;
+	
 	@Override
 	public AbstractNode getNode(String id) {
-		// TODO Auto-generated method stub
+		if(id == null) {
+			return null;
+		}
+		for(DiNode dn: struct.keySet()) {
+			if(id.equals(dn.id)) {
+				return dn;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public void addNode(String id, String label) {
-		// TODO Auto-generated method stub
-
+		assert(getNode(id) == null);
+		DiNode dn = new DiNode(id, label);
+		DiEdges des = new DiEdges();
+		struct.put(dn, des);
+		if(start == null) {
+			start = dn;
+		}
+	}
+	
+	private void removeNode(DiNode dn) {
+		DiEdges des = struct.get(dn);
+		for(DiEdge de: des.pres) {
+			DiNode from = de.from;
+			struct.get(from).posts.remove(de);
+			if(isIsolated(from)) {
+				removeNode(from);
+			}
+		}
+		for(DiEdge de: des.posts) {
+			DiNode to = de.to;
+			struct.get(to).pres.remove(de);
+			if(isIsolated(to)) {
+				removeNode(to);
+			}
+		}
 	}
 
 	@Override
 	public void removeNode(String id) {
-		// TODO Auto-generated method stub
-
+		DiNode dn = (DiNode) getNode(id);
+		if(dn == null) {
+			return;
+		} else {
+			removeNode(dn);
+		}
 	}
 
 	@Override
 	public void addEdge(String fromId, String toId) {
-		// TODO Auto-generated method stub
-
+		DiNode from = (DiNode) getNode(fromId);
+		DiNode to = (DiNode) getNode(toId);
+		assert(from != null && to != null);
+		DiEdge de = new DiEdge(from, to);
+		struct.get(from).posts.add(de);
+		struct.get(to).pres.add(de);
 	}
 
 	@Override
 	public void removeEdge(String fromId, String toId) {
-		// TODO Auto-generated method stub
-
+		DiNode from = (DiNode) getNode(fromId);
+		DiNode to = (DiNode) getNode(toId);
+		assert(from != null && to != null);
+		struct.get(from).removePostTo(to);
+		struct.get(to).removePreFrom(from);
+		if(isIsolated(from)) {
+			removeNode(from);
+		}
+		if(isIsolated(to)) {
+			removeNode(to);
+		}
 	}
 
 	@Override
 	public AbstractNode getNearestNode(double x, double y, double z) {
-		// TODO Auto-generated method stub
-		return null;
+		double dist = 0.25;
+		DiNode rn = null;
+
+		for (DiNode n : struct.keySet()) {
+			double tmp_dist = Math.sqrt(
+					Math.pow(n.xyz.getX() - x, 2) + Math.pow(n.xyz.getY() - y, 2) + Math.pow(n.xyz.getZ() - z, 2));
+			if (tmp_dist <= dist) {
+				rn = n;
+				break;
+			}
+		}
+
+		return rn;
 	}
 
 	@Override
 	public void clearColor() {
-		// TODO Auto-generated method stub
-
+		for(DiNode dn: struct.keySet()) {
+			dn.clearColor();
+		}
+	}
+	
+	private boolean isIsolated(DiNode dn) {
+		DiEdges des = struct.get(dn);
+		return des.pres.size() == 0 && des.posts.size() == 0;
 	}
 
 	@Override
@@ -152,20 +222,20 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public AbstractNode getStart() {
-		// TODO Auto-generated method stub
-		return null;
+		return start;
 	}
 
 	@Override
 	public Set<AbstractNode> getSuccessors(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		DiNode dn = (DiNode) getNode(id);
+//		assert(dn != null);
+		return getSuccessors(dn);
 	}
 
 	@Override
 	public Set<AbstractNode> getPredecessors(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		DiNode dn = (DiNode) getNode(id);
+		return getPredecessors(dn);
 	}
 
 	public Set<DiNode> getDiNodes() {
@@ -183,14 +253,22 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public Set<AbstractNode> getSuccessors(AbstractNode an) {
-		// TODO Auto-generated method stub
-		return null;
+		assert(an != null);
+		Set<AbstractNode> succs = new HashSet<AbstractNode>();
+		for(DiEdge de: struct.get(an).posts) {
+			succs.add(de.to);
+		}
+		return succs;
 	}
 
 	@Override
 	public Set<AbstractNode> getPredecessors(AbstractNode an) {
-		// TODO Auto-generated method stub
-		return null;
+		assert(an != null);
+		Set<AbstractNode> preds = new HashSet<AbstractNode>();
+		for(DiEdge de: struct.get(an).pres) {
+			preds.add(de.from);
+		}
+		return preds;
 	}
 
 	@Override
@@ -200,8 +278,27 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public AssistAffect parseJSON(JSONObject json) {
-		// TODO Auto-generated method stub
+		switch (json.getString("type")) {
+		case "add_node": {
+			JSONObject json_node = json.getJSONObject("node");
+			return new AddNodeAffect(json_node.getString("id"), json_node.getString("label"), null);
+//			break;
+		}
+		case "remove_node": 
+			return new RemoveNodeAffect(json.getString("node_id"));
+		case "add_edge": {
+			return new AddEdgeAffect(json.getString("from_id"), json.getString("to_id"), null);
+		}
+		case "remove_edge":
+			return new RemoveEdgeAffect(json.getString("from_id"), json.getString("to_id"));
+		case "highlight_node": {
+			return new PickNodeAffect(getNode(json.getString("node_id")));
+		}
+		default:
+			System.out.println("Message type not known: "+json.getString("type"));
+		}
 		return null;
+	
 	}
 
 }
@@ -209,5 +306,22 @@ public class DiGraph extends AbstractGraph {
 class DiEdges {
 	public Set<DiEdge> pres = new HashSet<DiEdge>();
 	public Set<DiEdge> posts = new HashSet<DiEdge>();
+	public void removePostTo(DiNode to) {
+		for(DiEdge de:posts) {
+			if(de.to.equals(to)) {
+				posts.remove(de);
+				return;
+			}
+		}
+	}
+	
+	public void removePreFrom(DiNode from) {
+		for(DiEdge de: pres) {
+			if(de.from.equals(from)) {
+				posts.remove(from);
+				return;
+			}
+		}
+	}
 	
 }

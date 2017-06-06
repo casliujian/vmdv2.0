@@ -48,6 +48,16 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```
 
 
+- Remove node (proof systems --> vmdv):
+
+  ```json
+  {
+    "type": "remove_node",
+    "session_id": string,
+    "node_id": string
+  }
+  ```
+
 - Add edge (proof systems —> vmdv):
 
   ```json
@@ -61,13 +71,25 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   ```
 
 
+- Remove edge (proof systems --> vmdv):
+
+  ```json
+  {
+    "type": "remove_edge",
+    "session_id": string,
+    "from_id": string,
+    "to_id":string
+  }
+  ```
+
 - Change node state (proof systems —> vmdv):
 
   ```json
   {
     "type": "change_node_state",
     "session_id": string,
-    "node_id": string
+    "node_id": string,
+    "new_state", string
   }
   ```
 

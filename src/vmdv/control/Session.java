@@ -94,7 +94,6 @@ public class Session {
 			default:
 				System.out.println("unknown feedback received");
 			}
-		case 
 		default:	
 			AssistAffect affect = graph.parseJSON(json);
 			if (affect != null) {

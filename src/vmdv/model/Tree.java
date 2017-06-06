@@ -19,6 +19,8 @@ import vmdv.dev.AssistAffect;
 import vmdv.dev.affects.AddEdgeAffect;
 import vmdv.dev.affects.AddNodeAffect;
 import vmdv.dev.affects.PickNodeAffect;
+import vmdv.dev.affects.RemoveEdgeAffect;
+import vmdv.dev.affects.RemoveNodeAffect;
 
 public class Tree extends AbstractGraph {
 	private int height = 0;
@@ -379,9 +381,13 @@ public class Tree extends AbstractGraph {
 			return new AddNodeAffect(json_node.getString("id"), json_node.getString("label"), json_node.getString("state"));
 //			break;
 		}
+		case "remove_node": 
+			return new RemoveNodeAffect(json.getString("node_id"));
 		case "add_edge": {
 			return new AddEdgeAffect(json.getString("from_id"), json.getString("to_id"), json.getString("label"));
 		}
+		case "remove_edge":
+			return new RemoveEdgeAffect(json.getString("from_id"), json.getString("to_id"));
 		case "highlight_node": {
 			return new PickNodeAffect(getNode(json.getString("node_id")));
 		}
