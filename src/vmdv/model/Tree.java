@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ public class Tree extends AbstractGraph {
 	public HashMap<String, ArrayList<TreeNode>> depthMap = new HashMap<String, ArrayList<TreeNode>>();
 	private HashMap<TreeNode, TreeEdges> struct = new HashMap<TreeNode, TreeEdges>();
 	private TreeNode root;
+	private Random random = new Random();
 
 	public Tree() {
 		this.struct = new HashMap<TreeNode, TreeEdges>();
@@ -158,26 +160,30 @@ public class Tree extends AbstractGraph {
 	@Override
 	public void addNode(String id, String label) {
 		TreeNode tmp_n = (TreeNode) getNode(id);
-		assert (tmp_n == null); // make sure the added node does not exists
-								// before
+		if(tmp_n != null) {
+			return;
+		}
 		TreeNode tn = new TreeNode(id, label);
 		TreeEdges tes = new TreeEdges();
 		if (struct.isEmpty()) {
 			root = tn;
 		}
 		struct.put(tn, tes);
+		tn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
 	}
 
 	public void addNode(String id, String label, String proofState) {
 		TreeNode tmp_n = (TreeNode) getNode(id);
-		assert (tmp_n == null); // make sure the added node does not exists
-								// before
+		if(tmp_n != null) {
+			return;
+		}
 		TreeNode tn = new TreeNode(id, label, proofState);
 		TreeEdges tes = new TreeEdges();
 		if (struct.isEmpty()) {
 			root = tn;
 		}
 		struct.put(tn, tes);
+		tn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
 	}
 
 	@Override
@@ -271,6 +277,7 @@ public class Tree extends AbstractGraph {
 				return;
 			}
 			if (tn.visible) {
+				drawedNodes ++;
 				RGBColor color = tn.color;
 				gl.glPushMatrix();
 				gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
@@ -318,7 +325,7 @@ public class Tree extends AbstractGraph {
 				}
 			}
 		}
-
+//		System.out.println("Total nodes: "+struct.keySet().size()+", Drawn nodes: "+drawedNodes);
 	}
 
 	@Override

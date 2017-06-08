@@ -2,6 +2,7 @@ package vmdv.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -21,6 +22,7 @@ import vmdv.dev.affects.RemoveNodeAffect;
 public class DiGraph extends AbstractGraph {
 	private HashMap<DiNode, DiEdges> struct = new HashMap<DiNode, DiEdges>();
 	private DiNode start = null;
+	private Random random = new Random();
 	
 	@Override
 	public AbstractNode getNode(String id) {
@@ -37,13 +39,17 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public void addNode(String id, String label) {
-		assert(getNode(id) == null);
+		if(getNode(id) != null) {
+			return;
+		}
 		DiNode dn = new DiNode(id, label);
 		DiEdges des = new DiEdges();
 		struct.put(dn, des);
 		if(start == null) {
 			start = dn;
 		}
+		dn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
+		
 	}
 	
 	private void removeNode(DiNode dn) {

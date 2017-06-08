@@ -31,6 +31,8 @@ public class Session {
 	}
 	
 	public void start() {
+		viewer.setLocation(300, 300);
+		viewer.setSize(1000, 1000);
 		viewer.showView();
 	}
 	
@@ -97,6 +99,7 @@ public class Session {
 		default:	
 			AssistAffect affect = graph.parseJSON(json);
 			if (affect != null) {
+				System.out.println("Adding an affect in session "+this.sid);
 				viewer.affect.addLast(affect);
 			}
 		}

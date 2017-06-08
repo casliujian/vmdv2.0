@@ -25,6 +25,9 @@ public class GLEventHandler implements GLEventListener {
 	
 	private int frames = 0;
 	private long time;
+	
+	private float[] lightPosition = new float[4];
+	private float[] whiteLight = new float[4];
 
 	public void setViewer(Viewer viewer) {
 		this.viewer = viewer;
@@ -258,7 +261,7 @@ public class GLEventHandler implements GLEventListener {
 		long timeDiff = currentTime - time;
 		if(timeDiff > 1000) {
 			float fps = frames*1000/timeDiff;
-			System.out.println("FPS: "+fps);
+			System.out.println("FPS of "+viewer.session.getSid()+": "+fps);
 			time  = currentTime;
 			frames = 0;
 		} else {
@@ -284,14 +287,100 @@ public class GLEventHandler implements GLEventListener {
 
 	@Override
 	public void init(GLAutoDrawable gld) {
-		// TODO Auto-generated method stub
+		tr.setColor(0, 0, 0, 1);
+		lightPosition[0] = 10.0f;
+		lightPosition[1] = 10.0f;
+		lightPosition[2] = 10.0f;
+		lightPosition[3] = 0.0f;
+		whiteLight[0] = 0.8f;
+		whiteLight[1] = 0.8f;
+		whiteLight[2] = 0.8f;
+		whiteLight[3] = 1.0f;
+		GL2 gl = gld.getGL().getGL2();
+
+		// GLUT glut = new GLUT();
+		gld.setAutoSwapBufferMode(true);
+		glu.gluLookAt(viewer.eyex, viewer.eyey, viewer.eyez, 0, 0, 0, 0, 1, 0);
+		gl.glColorMaterial(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE);
+		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+//		gl.glClearColor(238.0f / 255.0f, 226.0f / 255.0f, 185.0f / 255.0f, 0.0f);
+//		gl.glClearColor(227.0f/255, 237.0f/255, 205.0f/255, 0);
+		gl.glClearColor(1, 1, 1, 0);
+		gl.glClearDepth(1.0);
+//		gl.glShadeModel(GL2.GL_SMOOTH);
+//		gl.glEnable(GL2.GL_LIGHTING);
+//		gl.glEnable(GL2.GL_LIGHT0);
+		gl.glEnable(GL2.GL_LINE_SMOOTH);
+		gl.glEnable(GL2.GL_POLYGON_SMOOTH);
+		gl.glHint(GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST);
+		gl.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL2.GL_NICEST);
+		gl.glEnable(GL2.GL_BLEND);
+		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable(GL2.GL_DEPTH_TEST);
+
+		gl.glViewport(0, 0, gld.getSurfaceWidth(), gld.getSurfaceHeight());
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		int width = gld.getSurfaceWidth();
+		int height = gld.getSurfaceHeight();
+		if(width == 0 || height == 0) {
+			glu.gluPerspective(60.0f, 1, 1.0f, 10000.0f);
+		} else {
+			glu.gluPerspective(60.0f, width / height, 1.0f, 10000.0f);
+		}
+//		glu.gluPerspective(60.0f, gld.getSurfaceWidth() / gld.getSurfaceHeight(), 1.0f, 10000.0f);
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		// gl.glLightfv(arg0, arg1, arg2, arg3);
+//		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPosition, 0);
+//		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, whiteLight, 0);
+//		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, whiteLight, 0);
+		// glu.gluOrtho2D(0.0, 500.0, 0.0, 300.0);
+		gld.swapBuffers();
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.setCamera(gld);
 
 		this.time = System.currentTimeMillis();
 	}
 
 	@Override
-	public void reshape(GLAutoDrawable gld, int arg1, int arg2, int arg3, int arg4) {
-		// TODO Auto-generated method stub
+	public void reshape(GLAutoDrawable gld, int x, int y, int width, int height) {
+//		GL2 gl = gld.getGL().getGL2();
+//		gl.glViewport(x, y, width, height);
+//		gl.glMatrixMode(GL2.GL_PROJECTION);
+//		gl.glLoadIdentity();
+//		if(width == 0 || height == 0) {
+//			glu.gluPerspective(60.0f, 1, 1.0f, 10000.0f);
+//		} else {
+//			glu.gluPerspective(60.0f, width / height, 1.0f, 10000.0f);
+//		}
+//		
+//		gl.glMatrixMode(GL2.GL_MODELVIEW);
+//
+//		glu.gluLookAt(viewer.eyex, viewer.eyey, viewer.eyez, 0, 0, 0, 0, 1, 0);
+		
+		 if (height == 0) {
+	            height = 1;
+	        }
+	        GL2 gl2 = gld.getGL().getGL2();
+	        gl2.glViewport(0, 0, width, height);
+	 
+	        gl2.glMatrixMode(GL2.GL_PROJECTION);
+	        gl2.glLoadIdentity();
+	 
+	        // coordinate system origin at lower left with width and height same as
+	        // the window
+	        if (glu == null) {
+	            glu = new GLU();
+	        }
+	        glu.gluPerspective(45.0f, (float) ((float) width / (float) height),
+	                0.1f, 100.0f);
+	 
+	        gl2.glMatrixMode(GL2.GL_MODELVIEW);
+	        gl2.glLoadIdentity();
 
 	}
 

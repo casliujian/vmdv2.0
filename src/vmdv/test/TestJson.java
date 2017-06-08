@@ -18,6 +18,10 @@ public class TestJson {
 			json.accumulate("hello", "world3");
 		}
 		System.out.println(json.toString());
+		
+		String str_json = "{\"type\":\"add_edge\",\"session_id\":\"River_Crossing\",\"from_id\":\"6\",\"to_id\":\"5\",\"label\":\"\"}{\"type\":\"add_edge\",\"session_id\":\"River_Crossing\",\"from_id\":\"6\",\"to_id\":\"5\",\"label\":\"\"}";
+		JSONArray json_2 = new JSONArray(str_json);
+		System.out.println("str of multiple json: "+json_2.toString());
 	}
 
 }

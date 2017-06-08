@@ -9,6 +9,10 @@ import org.json.JSONObject;
 import vmdv.control.ForceAtlas2Layout;
 import vmdv.control.Session;
 import vmdv.control.VMDV;
+import vmdv.dev.popup.ClearColorPopup;
+import vmdv.dev.popup.HideAllLabelsPopup;
+import vmdv.dev.popup.ResetEyePopup;
+import vmdv.dev.popup.ShowAllLabelsPopup;
 import vmdv.model.DiGraph;
 import vmdv.model.Tree;
 import vmdv.ui.GLEventHandler;
@@ -49,6 +53,7 @@ public class Messenger {
 //				}
 				JSONObject json = vmdv.takeRequestMsg();
 				if(json != null) {
+					System.out.println("Sending: "+json.toString());
 					output.println(json.toString());
 					output.flush();
 				}
@@ -71,7 +76,9 @@ public class Messenger {
 			while (running) {
 				// for (String sid : sessions.keySet()) {
 				try {
+					
 					String str = input.readLine();
+					System.out.println("JSON received: "+str+"---");
 					JSONObject json = new JSONObject(str);
 					switch(json.getString("type")) {
 					case "create_session":
@@ -79,6 +86,12 @@ public class Messenger {
 						switch(graphType) {
 						case "Tree":
 							Viewer treeViewer = new Viewer(json.getString("session_descr"));
+							
+							treeViewer.addBackgroundPopup(new ClearColorPopup("Clear Color"));
+							treeViewer.addBackgroundPopup(new ResetEyePopup("Reset Eye Position"));
+							treeViewer.addBackgroundPopup(new ShowAllLabelsPopup("Show All Labels"));
+							treeViewer.addBackgroundPopup(new HideAllLabelsPopup("Hide All Labels"));
+							
 							GLEventHandler glh = new GLEventHandler();
 							treeViewer.registerGLHandler(glh);
 							KeyHandler kh = new KeyHandler();
@@ -118,7 +131,9 @@ public class Messenger {
 							break;
 						}
 					default: {
+							
 							String sid = json.getString("session_id");
+							System.out.println("Session "+sid+" parsing message.");
 							Session session = vmdv.getSession(sid);
 							session.parseResponseMsg(json);
 						}

@@ -13,14 +13,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.json.JSONObject;
 
 import vmdv.communicate.Messenger;
-import vmdv.model.DiGraph;
-import vmdv.model.Tree;
-import vmdv.ui.GLEventHandler;
-import vmdv.ui.KeyHandler;
-import vmdv.ui.MouseHandler;
-import vmdv.ui.MouseMotionHandler;
-import vmdv.ui.MouseWheelHandler;
-import vmdv.ui.Viewer;
 
 public class VMDV {
 	private Messenger messenger;
@@ -31,6 +23,7 @@ public class VMDV {
 		try {
 			ServerSocket ss = new ServerSocket(3333);
 			Socket s = ss.accept();
+			
 			BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			PrintWriter output = new PrintWriter(s.getOutputStream());
 			this.messenger = new Messenger(input, output, this);

@@ -74,6 +74,7 @@ public class Viewer extends JFrame {
 		GLCapabilities glcaps = new GLCapabilities(glp);
 		glcaps.setDoubleBuffered(true);
 		this.renderPanel = new GLJPanel(glcaps);
+		this.add(renderPanel);
 		this.backPop = new JPopupMenu();
 		this.nodePop = new JPopupMenu();
 //		glistener.
