@@ -1,5 +1,7 @@
 package vmdv.dev.popup;
 
+import java.util.Set;
+
 import vmdv.control.Session;
 import vmdv.dev.PopupItem;
 import vmdv.dev.affects.ShowNodeInfoAffect;
@@ -13,11 +15,13 @@ public class ShowNodeInfoPopup extends PopupItem {
 
 	@Override
 	public void action(Session session) {
-		AbstractNode n = session.getViewer().getSelectedNode();
-//		if(n == null) {
-//			return;
-//		}
-		session.getViewer().affect.addLast(new ShowNodeInfoAffect(n));
+		Set<AbstractNode> ns = session.getViewer().getSelectedNode();
+		if(ns.size() == 1) {
+			for(AbstractNode an: ns) {
+				session.getViewer().affect.addLast(new ShowNodeInfoAffect(an));
+			}
+		}
+
 	}
 
 }

@@ -103,6 +103,27 @@ Both proof systems or vmdv can send **commands** to each other and, for each **c
   }
   ```
 
+- Unhighlight node (vmdv <--> proof systems):
+
+  ```json
+  {
+    "type": "unhighlight_node",
+    "session_id": string,
+    "node_id": string
+  }
+  ```
+
+- Clear color (vmdv <--> proof systems):
+
+  ```json
+  {
+    "type": "clear_color",
+    "session_id": string
+  }
+  ```
+
+  ​
+
 ## 2. Feedback for commands
 
 Feedback (vmdv —> proof systems):

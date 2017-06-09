@@ -12,14 +12,24 @@ public class KeyHandler implements KeyListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		switch(e.getKeyCode()) {
+		case KeyEvent.VK_CONTROL:
+			viewer.singleSelection = false;
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		switch(e.getKeyCode()) {
+		case KeyEvent.VK_CONTROL:
+			viewer.singleSelection = true;
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override

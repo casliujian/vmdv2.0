@@ -2,7 +2,7 @@ package vmdv.dev.affects;
 
 import java.util.LinkedList;
 
-import vmdv.communicate.UnPickNodeRequest;
+import vmdv.communicate.ClearColorRequest;
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
 import vmdv.model.AbstractGraph;
@@ -28,13 +28,14 @@ public class ClearColorAffect extends AssistAffect {
 				n.clearColor();
 //				if(n.isPicked()) {
 					n.picked = false;
-					session.addRequestMsg(new UnPickNodeRequest(n.id));
+//					session.addRequestMsg(new UnHighlightNodeRequest(n.id));
 //					tv.operateListener.unHightLightState(n.getId());
 //				}
 				for(TreeNode tn : tree.children(n)) {
 					looked.addLast(tn);
 				}
 			}
+			session.addRequestMsg(new ClearColorRequest());
 		} else if(graph instanceof DiGraph) {
 			DiGraph dgraph = (DiGraph)graph;
 			for(DiNode dn: dgraph.getDiNodes()) {

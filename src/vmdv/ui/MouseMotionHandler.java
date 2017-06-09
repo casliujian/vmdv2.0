@@ -26,8 +26,7 @@ public class MouseMotionHandler implements MouseMotionListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		viewer.mousePosition = e.getPoint();
 	}
 
 

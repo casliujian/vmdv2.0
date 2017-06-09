@@ -131,7 +131,6 @@ public class Messenger {
 							break;
 						}
 					default: {
-							
 							String sid = json.getString("session_id");
 							System.out.println("Session "+sid+" parsing message.");
 							Session session = vmdv.getSession(sid);

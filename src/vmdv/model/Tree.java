@@ -19,9 +19,11 @@ import vmdv.config.GraphConfig.GraphType;
 import vmdv.dev.AssistAffect;
 import vmdv.dev.affects.AddEdgeAffect;
 import vmdv.dev.affects.AddNodeAffect;
-import vmdv.dev.affects.PickNodeAffect;
+import vmdv.dev.affects.ClearColorAffect;
+import vmdv.dev.affects.HighlightNodeAffect;
 import vmdv.dev.affects.RemoveEdgeAffect;
 import vmdv.dev.affects.RemoveNodeAffect;
+import vmdv.dev.affects.UnHighlightNodeAffect;
 
 public class Tree extends AbstractGraph {
 	private int height = 0;
@@ -396,8 +398,12 @@ public class Tree extends AbstractGraph {
 		case "remove_edge":
 			return new RemoveEdgeAffect(json.getString("from_id"), json.getString("to_id"));
 		case "highlight_node": {
-			return new PickNodeAffect(getNode(json.getString("node_id")));
+			return new HighlightNodeAffect(getNode(json.getString("node_id")));
 		}
+		case "unhighlight_node" :
+			return new UnHighlightNodeAffect(getNode(json.getString("node_id")));
+		case "clear_color": 
+			return new ClearColorAffect();
 		default:
 			System.out.println("Message type not known: "+json.getString("type"));
 		}

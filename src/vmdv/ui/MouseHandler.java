@@ -3,8 +3,8 @@ package vmdv.ui;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import vmdv.dev.affects.PickNodeAffect;
-import vmdv.dev.affects.UnPickNodeAffect;
+import vmdv.dev.affects.HighlightNodeAffect;
+import vmdv.dev.affects.UnHighlightNodeAffect;
 import vmdv.model.AbstractNode;
 
 public class MouseHandler implements MouseListener {
@@ -17,7 +17,7 @@ public class MouseHandler implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		viewer.mousePosition = e.getPoint();
+//		viewer.mousePosition = e.getPoint();
 		AbstractNode selected = viewer.hoverNode;
 		if (e.isMetaDown()) {//right click the mouse
 			viewer.popupShowed = true;
@@ -29,10 +29,27 @@ public class MouseHandler implements MouseListener {
 		} else {//left click the mouse
 			viewer.popupShowed = false;
 			if(selected != null) {
-				if(selected.picked) {
-					viewer.affect.addLast(new UnPickNodeAffect(selected));
+				if(viewer.singleSelection) {
+					if(selected.picked) {
+						viewer.affect.addLast(new UnHighlightNodeAffect(selected));
+						viewer.nodesSelected.clear();
+					} else {
+						for(AbstractNode an: viewer.nodesSelected) {
+							viewer.affect.addLast(new UnHighlightNodeAffect(an));
+							viewer.nodesSelected.remove(an);
+						}
+						viewer.nodesSelected.add(selected);
+						viewer.affect.addLast(new HighlightNodeAffect(selected));
+					}
 				} else {
-					viewer.affect.addLast(new PickNodeAffect(selected));
+					//multi selection
+					if(selected.picked) {
+						viewer.affect.addLast(new UnHighlightNodeAffect(selected));
+						viewer.nodesSelected.remove(selected);
+					} else {
+						viewer.nodesSelected.add(selected);
+						viewer.affect.addLast(new HighlightNodeAffect(selected));
+					}
 				}
 			}
 		}

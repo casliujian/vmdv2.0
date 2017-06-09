@@ -9,7 +9,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -29,7 +31,6 @@ import vmdv.dev.AssistAffect;
 import vmdv.dev.PopupItem;
 import vmdv.model.AbstractGraph;
 import vmdv.model.AbstractNode;
-import vmdv.model.Node;
 import vmdv.model.NodeProperty;
 
 public class Viewer extends JFrame {
@@ -61,12 +62,15 @@ public class Viewer extends JFrame {
 	
 	protected AbstractNode hoverNode = null;
 	protected NodeProperty hoverNodeState = null;
-	protected AbstractNode nodeSelected = null;
-	protected NodeProperty selectNodeState = null;
-	protected LinkedList<Node> multiNodesSelected = new LinkedList<Node>();
-	protected LinkedList<NodeProperty> multiNodesSelectedState = new LinkedList<NodeProperty>();
+//	protected AbstractNode nodeSelected = null;
+//	protected NodeProperty hoverNodeState = null;
+	protected Set<AbstractNode> nodesSelected = new HashSet<AbstractNode>();
+//	protected AbstractNode nodeFocused = null;
+//	protected LinkedList<NodeProperty> multiNodesSelectedState = new LinkedList<NodeProperty>();
 	protected GraphLayout layout;
 	protected Session session;
+	
+//	protected boolean multiSelection = false;
 	
 	public Viewer(String title) {
 		this.setTitle(title);
@@ -111,8 +115,8 @@ public class Viewer extends JFrame {
 		}
 	}
 	
-	public AbstractNode getSelectedNode() {
-		return nodeSelected;
+	public Set<AbstractNode> getSelectedNode() {
+		return nodesSelected;
 	}
 	
 	public void setGraphLayout(GraphLayout layout) {
