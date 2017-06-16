@@ -31,6 +31,7 @@ import vmdv.dev.AssistAffect;
 import vmdv.dev.PopupItem;
 import vmdv.model.AbstractGraph;
 import vmdv.model.AbstractNode;
+//import vmdv.model.NodeProperty;
 import vmdv.model.NodeProperty;
 
 public class Viewer extends JFrame {

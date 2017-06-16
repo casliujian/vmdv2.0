@@ -26,6 +26,7 @@ public class ClearColorAffect extends AssistAffect {
 				TreeNode n = looked.removeFirst();
 				n.showChildLabel = false;
 				n.clearColor();
+				n.resetSize();
 //				if(n.isPicked()) {
 					n.picked = false;
 //					session.addRequestMsg(new UnHighlightNodeRequest(n.id));
@@ -40,6 +41,7 @@ public class ClearColorAffect extends AssistAffect {
 			DiGraph dgraph = (DiGraph)graph;
 			for(DiNode dn: dgraph.getDiNodes()) {
 				dn.clearColor();
+				dn.resetSize();
 			}
 		}
 	}

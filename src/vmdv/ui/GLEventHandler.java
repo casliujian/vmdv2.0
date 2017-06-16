@@ -11,6 +11,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 import vmdv.config.ColorConfig;
 import vmdv.model.AbstractNode;
+//import vmdv.model.NodeProperty;
 import vmdv.model.NodeProperty;
 
 public class GLEventHandler implements GLEventListener {

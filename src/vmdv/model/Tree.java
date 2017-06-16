@@ -186,6 +186,7 @@ public class Tree extends AbstractGraph {
 		}
 		struct.put(tn, tes);
 		tn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
+		
 	}
 
 	@Override
@@ -205,6 +206,8 @@ public class Tree extends AbstractGraph {
 			height = fnDepth + 1;
 		}
 		updateDepthColor();
+		fn.clearColor();
+		tn.clearColor();
 	}
 	
 	public void addEdge(String fromId, String toId, String label) {
@@ -223,6 +226,8 @@ public class Tree extends AbstractGraph {
 			height = fnDepth + 1;
 		}
 		updateDepthColor();
+		fn.clearColor();
+		tn.clearColor();
 	}
 
 	@Override

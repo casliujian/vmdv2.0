@@ -111,6 +111,7 @@ public class Messenger {
 							break;
 						case "DiGraph":
 							Viewer stateViewer = new Viewer(json.getString("session_descr"));
+							stateViewer.addBackgroundPopup(new ClearColorPopup("Clear Color"));
 							stateViewer.registerGLHandler(new GLEventHandler());
 							stateViewer.registerKeyHandler(new KeyHandler());
 							stateViewer.registerMouseHandler(new MouseHandler());

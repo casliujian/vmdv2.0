@@ -11,6 +11,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import vmdv.config.ColorConfig;
 import vmdv.config.GraphConfig.GraphType;
 import vmdv.dev.AssistAffect;
 import vmdv.dev.affects.AddEdgeAffect;
@@ -50,6 +51,7 @@ public class DiGraph extends AbstractGraph {
 		if(start == null) {
 			start = dn;
 		}
+		dn.oriColor = ColorConfig.oriColor;
 		dn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
 		
 	}
@@ -148,6 +150,7 @@ public class DiGraph extends AbstractGraph {
 			RGBColor color = sn.color;
 			gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
 			glut.glutSolidSphere(sn.size, 10, 10);
+			gl.glColor3f(0, 0, 0);
 			drawedNodes++;
 			// if(sn.isLableVisible()) {
 			// tr.begin3DRendering();

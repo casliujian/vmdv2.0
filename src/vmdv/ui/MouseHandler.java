@@ -51,6 +51,11 @@ public class MouseHandler implements MouseListener {
 						viewer.affect.addLast(new HighlightNodeAffect(selected));
 					}
 				}
+			} else {
+				for(AbstractNode an: viewer.nodesSelected) {
+					viewer.affect.addLast(new UnHighlightNodeAffect(an));
+					viewer.nodesSelected.remove(an);
+				}
 			}
 		}
 	}

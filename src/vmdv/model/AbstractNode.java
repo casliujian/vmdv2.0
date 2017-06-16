@@ -1,7 +1,7 @@
 package vmdv.model;
 
 public abstract class AbstractNode {
-	public RGBColor oriColor = new RGBColor();
+	public RGBColor oriColor = new RGBColor(0,0,0);
 	public double oriSize;
 
 	public String id;
@@ -21,6 +21,7 @@ public abstract class AbstractNode {
 		this.color = new RGBColor(0, 0, 0);
 		this.visible = true;
 		this.id = id;
+		this.oriSize = 0.2;
 		this.size = 0.2;
 		this.label = label;
 		this.showLabel = false;
@@ -30,6 +31,10 @@ public abstract class AbstractNode {
 	
 	public void clearColor() {
 		this.color = new RGBColor(oriColor.getRed(), oriColor.getGreen(), oriColor.getBlue());
+	}
+	
+	public void resetSize() {
+		this.size = oriSize;
 	}
 
 	public void addForce(double d, double e, double f) {

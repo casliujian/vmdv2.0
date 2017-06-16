@@ -13,5 +13,4 @@ public class ResetEyePopup extends PopupItem {
 	public void action(Session session) {
 		session.getViewer().setEye(0, 0, 5);
 	}
-
 }
