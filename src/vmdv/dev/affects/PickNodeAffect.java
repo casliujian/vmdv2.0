@@ -9,6 +9,7 @@ import vmdv.model.DiGraph;
 import vmdv.model.RGBColor;
 import vmdv.model.Tree;
 import vmdv.model.TreeNode;
+import vmdv.ui.Viewer;
 
 public class PickNodeAffect extends AssistAffect {
 	private AbstractNode node;
@@ -38,6 +39,9 @@ public class PickNodeAffect extends AssistAffect {
 //				sb.append("<h3>Child "+index+": "+tn.getLabel()+"</h3><br>");
 				index++;
 			}
+//			Viewer viewer = session.getViewer();
+//			viewer.setStatusStr(node.label);
+//			System.out.println();
 //			sb.append("</html>");
 		} else if(graph instanceof DiGraph) {
 			node.picked = true;

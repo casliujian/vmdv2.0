@@ -9,6 +9,7 @@ import vmdv.model.AbstractNode;
 import vmdv.model.DiGraph;
 import vmdv.model.RGBColor;
 import vmdv.model.Tree;
+import vmdv.ui.Viewer;
 
 public class HighlightNodeAffect extends AssistAffect {
 	private AbstractNode node;
@@ -41,7 +42,8 @@ public class HighlightNodeAffect extends AssistAffect {
 			RGBColor color = ColorConfig.red;
 			node.color = new RGBColor(color.getRed(), color.getGreen(), color.getBlue());
 		}
-		
+		Viewer viewer = session.getViewer();
+		viewer.setStatusStr(node.label);
 		
 
 	}

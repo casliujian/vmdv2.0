@@ -44,6 +44,7 @@ public class ClearColorAffect extends AssistAffect {
 				dn.resetSize();
 			}
 		}
+		viewer.clearStatusStr();
 	}
 
 }

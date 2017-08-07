@@ -23,7 +23,7 @@ public class GLEventHandler implements GLEventListener {
 
 	private Viewer viewer;
 
-	private int frames = 0;
+	private float frames = 0;
 	private long time;
 
 	private float[] lightPosition = new float[4];
@@ -263,11 +263,12 @@ public class GLEventHandler implements GLEventListener {
 		long timeDiff = currentTime - time;
 		if (timeDiff > 1000) {
 			float fps = frames * 1000 / timeDiff;
-			System.out.println("FPS of " + viewer.session.getSid() + ": " + fps);
+//			System.out.println("FPS of " + viewer.session.getSid() + ": " + fps);
+			this.viewer.setStatusStrIfEmpty("FPS: "+fps);
 			time = currentTime;
 			frames = 0;
 		} else {
-			frames++;
+			frames = frames + 1.0f;
 		}
 
 	}

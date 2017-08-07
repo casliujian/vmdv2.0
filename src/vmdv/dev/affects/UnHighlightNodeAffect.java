@@ -6,6 +6,7 @@ import vmdv.dev.AssistAffect;
 import vmdv.model.AbstractNode;
 import vmdv.model.DiNode;
 import vmdv.model.TreeNode;
+import vmdv.ui.Viewer;
 
 public class UnHighlightNodeAffect extends AssistAffect {
 	private AbstractNode node;
@@ -27,6 +28,9 @@ public class UnHighlightNodeAffect extends AssistAffect {
 			dn.picked = false;
 			dn.clearColor();
 		}
+		Viewer viewer = session.getViewer();
+//		viewer.setStatusStr(" ");
+		viewer.clearStatusStr();
 	}
 
 }

@@ -1,5 +1,6 @@
 package vmdv.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +15,9 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import com.jogamp.opengl.GL2;
@@ -39,6 +42,9 @@ public class Viewer extends JFrame {
 	private GLUT glut = new GLUT();
 	
 	private GLJPanel renderPanel;
+	private JPanel statusPanel;
+	private JLabel statusLabel;
+	private boolean statusStrEmpty = true;
 	protected JPopupMenu backPop, nodePop;
 	private GLEventListener glistener;
 	private KeyListener keyListener;
@@ -82,8 +88,29 @@ public class Viewer extends JFrame {
 		this.add(renderPanel);
 		this.backPop = new JPopupMenu();
 		this.nodePop = new JPopupMenu();
+		this.statusPanel = new JPanel();
+		this.statusLabel = new JLabel();
+		this.statusPanel.add(statusLabel, BorderLayout.CENTER);
+		this.statusLabel.setText(" ");
+		this.getContentPane().add(statusPanel, BorderLayout.SOUTH);
 //		glistener.
 //		this.renderPanel.addm
+	}
+	
+	public void setStatusStr(String str) {
+		this.statusLabel.setText(str);
+		this.statusStrEmpty = false;
+	}
+	
+	public void clearStatusStr() {
+//		this.statusLabel.setText("str");
+		this.statusStrEmpty = true;
+	}
+	
+	public void setStatusStrIfEmpty(String str) {
+		if (this.statusStrEmpty) {
+			this.statusLabel.setText(str);
+		}
 	}
 	
 	public void addBackgroundPopup(PopupItem pop) {
