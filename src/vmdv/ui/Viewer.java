@@ -8,11 +8,14 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import java.io.UnsupportedEncodingException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,6 +35,8 @@ import vmdv.control.GraphLayout;
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
 import vmdv.dev.PopupItem;
+import vmdv.dev.affects.HighlightNodeAffect;
+import vmdv.dev.affects.PickNodeAffect;
 import vmdv.model.AbstractGraph;
 import vmdv.model.AbstractNode;
 //import vmdv.model.NodeProperty;
@@ -42,6 +47,7 @@ public class Viewer extends JFrame {
 	private GLUT glut = new GLUT();
 	
 	private GLJPanel renderPanel;
+	private SearchPanel searchPanel;
 	private JPanel statusPanel;
 	private JLabel statusLabel;
 	private boolean statusStrEmpty = true;
@@ -93,8 +99,67 @@ public class Viewer extends JFrame {
 		this.statusPanel.add(statusLabel, BorderLayout.CENTER);
 		this.statusLabel.setText(" ");
 		this.getContentPane().add(statusPanel, BorderLayout.SOUTH);
+		this.searchPanel = new SearchPanel(this);
+		this.getContentPane().add(searchPanel, BorderLayout.NORTH);
 //		glistener.
 //		this.renderPanel.addm
+	}
+	
+	public void search(String[] searchTexts) {
+		Pattern p = Pattern.compile(searchTexts[1].trim());
+		switch (searchTexts[0].trim()) {
+		case "":
+			for (AbstractNode node: graph.getNodes()) {
+				if (node.label.matches(searchTexts[1].trim())) {
+					PickNodeAffect pna = new PickNodeAffect(node);
+					this.affect.addLast(pna);
+				}
+			}
+			break;
+		case "node":
+			int count = 0;
+			for (AbstractNode node: graph.getNodes()) {
+				Matcher m = p.matcher(node.label);
+				
+				System.out.println(m.matches());
+				try {
+					if (new String(node.label.getBytes(), "UTF-8").matches(new String(searchTexts[1].trim().getBytes(), "UTF-8"))) {
+						
+						
+						HighlightNodeAffect hna = new HighlightNodeAffect(node);
+						this.affect.addLast(hna);
+						count++;
+					}else {
+						System.out.println(node.label+" doesn't match "+searchTexts[1].trim());
+					}
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println(searchTexts[1].trim()+" match "+count+" nodes in "+(graph.getNodes().size()));
+			break;
+		case "from":
+			for (AbstractNode node: graph.getNodes()) {
+				if (node.label.matches(searchTexts[1].trim())) {
+					for (AbstractNode toNode: graph.getSuccessors(node)) {
+						PickNodeAffect pna = new PickNodeAffect(toNode);
+						this.affect.addLast(pna);
+					}
+				}
+			}
+			break;
+		case "to":
+			for (AbstractNode node: graph.getNodes()) {
+				if (node.label.matches(searchTexts[1].trim())) {
+					for (AbstractNode fromNode: graph.getSuccessors(node)) {
+						PickNodeAffect pna = new PickNodeAffect(fromNode);
+						this.affect.addLast(pna);
+					}
+				}
+			}
+			break;
+		}
 	}
 	
 	public void setStatusStr(String str) {
