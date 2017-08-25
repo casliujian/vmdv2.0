@@ -149,9 +149,10 @@ public class DiGraph extends AbstractGraph {
 			gl.glTranslated(sn.xyz.getX(), sn.xyz.getY(), sn.xyz.getZ());
 			RGBColor color = sn.color;
 			gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
-			glut.glutSolidSphere(sn.size, 10, 10);
+			glut.glutSolidSphere(sn.size, 15, 15);
 			gl.glColor3f(0, 0, 0);
 			drawedNodes++;
+			System.out.println("drawed node "+drawedNodes);
 			// if(sn.isLableVisible()) {
 			// tr.begin3DRendering();
 			// tr.draw3D(sn.getLabel(), 0, 0, 0, 0.005f);
