@@ -27,6 +27,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -46,7 +47,7 @@ public class Viewer extends JFrame {
 	private GLU glu = new GLU();
 	private GLUT glut = new GLUT();
 	
-	private GLJPanel renderPanel;
+	private GLCanvas renderPanel;
 	private SearchPanel searchPanel;
 	private JPanel statusPanel;
 	private JLabel statusLabel;
@@ -87,10 +88,11 @@ public class Viewer extends JFrame {
 	
 	public Viewer(String title) {
 		this.setTitle(title);
-		GLProfile glp = GLProfile.getDefault();
+		GLProfile glp = GLProfile.get(GLProfile.GL2);
 		GLCapabilities glcaps = new GLCapabilities(glp);
 		glcaps.setDoubleBuffered(true);
-		this.renderPanel = new GLJPanel(glcaps);
+//		this.renderPanel = new GLJPanel(glcaps);
+		this.renderPanel = new GLCanvas(glcaps);
 		this.add(renderPanel);
 		this.backPop = new JPopupMenu();
 		this.nodePop = new JPopupMenu();

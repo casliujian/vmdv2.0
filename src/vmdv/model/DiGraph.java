@@ -21,6 +21,7 @@ import vmdv.dev.affects.HighlightNodeAffect;
 import vmdv.dev.affects.RemoveEdgeAffect;
 import vmdv.dev.affects.RemoveNodeAffect;
 import vmdv.dev.affects.UnHighlightNodeAffect;
+import vmdv.ui.Sphere;
 
 public class DiGraph extends AbstractGraph {
 	private HashMap<DiNode, DiEdges> struct = new HashMap<DiNode, DiEdges>();
@@ -111,7 +112,7 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public AbstractNode getNearestNode(double x, double y, double z) {
-		double dist = 0.25;
+		double dist = 1;
 		DiNode rn = null;
 
 		for (DiNode n : struct.keySet()) {
@@ -139,8 +140,8 @@ public class DiGraph extends AbstractGraph {
 	}
 
 	@Override
-	public void render(GL2 gl, GLUT glut, TextRenderer tr) {
-		int drawedNodes = 0;
+	public void render(GL2 gl, GLUT glut, TextRenderer tr, Sphere sphere) {
+//		int drawedNodes = 0;
 		for (DiNode sn : getDiNodes()) {
 			if (!sn.visible) {
 				continue;
@@ -148,36 +149,14 @@ public class DiGraph extends AbstractGraph {
 			gl.glPushMatrix();
 			gl.glTranslated(sn.xyz.getX(), sn.xyz.getY(), sn.xyz.getZ());
 			RGBColor color = sn.color;
-			gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
-			glut.glutSolidSphere(sn.size, 15, 15);
-			gl.glColor3f(0, 0, 0);
-			drawedNodes++;
-			System.out.println("drawed node "+drawedNodes);
-			// if(sn.isLableVisible()) {
-			// tr.begin3DRendering();
-			// tr.draw3D(sn.getLabel(), 0, 0, 0, 0.005f);
-			// tr.flush();
-			// tr.end3DRendering();
-			// }
-			// if(sn.isPicked()) {
-			// tr.begin3DRendering();
-			// tr.draw3D(sn.getLabel(), 0, 0, 0, 0.005f);
-			// tr.flush();
-			// tr.end3DRendering();
-			// }
-			// if(sn.isPicked()) {
-			// tr.beginRendering(gld.getSurfaceWidth(),
-			// gld.getSurfaceHeight());
-			// Point p = this.getScreenPoint(gld, sn.getX(), sn.getY(),
-			// sn.getZ());
-			// if(p != null) {
-			// tr.setColor(0, 0, 0, 1);
-			// tr.draw(sn.getLabel(), p.x, p.y);
-			// System.out.println("Showing label of sn: "+sn.getLabel()+" in
-			// position: "+String.valueOf(p.x)+","+String.valueOf(p.y));
-			// }
-			// tr.endRendering();
-			// }
+//			gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+//			glut.glutSolidSphere(sn.size, 15, 15);
+			sphere.render(gl, color);
+//			gl.glColor3f(0, 0, 0);
+//			drawedNodes++;
+//			if (drawedNodes >= 2875) {
+//				System.out.println("drawed node "+drawedNodes);
+//			}
 
 			gl.glPopMatrix();
 			for (DiEdge se : struct.get(sn).posts) {

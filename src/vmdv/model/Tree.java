@@ -24,6 +24,7 @@ import vmdv.dev.affects.HighlightNodeAffect;
 import vmdv.dev.affects.RemoveEdgeAffect;
 import vmdv.dev.affects.RemoveNodeAffect;
 import vmdv.dev.affects.UnHighlightNodeAffect;
+import vmdv.ui.Sphere;
 
 public class Tree extends AbstractGraph {
 	private int height = 0;
@@ -250,7 +251,7 @@ public class Tree extends AbstractGraph {
 
 	@Override
 	public AbstractNode getNearestNode(double x, double y, double z) {
-		double dist = 0.25;
+		double dist = 1;
 		TreeNode rn = null;
 
 		for (TreeNode n : struct.keySet()) {
@@ -273,7 +274,9 @@ public class Tree extends AbstractGraph {
 	}
 
 	@Override
-	public void render(GL2 gl, GLUT glut, TextRenderer tr) {
+	public void render(GL2 gl, GLUT glut, TextRenderer tr, Sphere sphere) {
+//		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+//		gl.glLoadIdentity();
 		LinkedList<TreeNode> painting = new LinkedList<TreeNode>();
 		painting.addLast(root);
 		int drawedNodes = 0;
@@ -287,11 +290,12 @@ public class Tree extends AbstractGraph {
 				drawedNodes ++;
 				RGBColor color = tn.color;
 				gl.glPushMatrix();
-				gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+//				gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
 				gl.glTranslated(tn.xyz.getX(), tn.xyz.getY(), tn.xyz.getZ());
-				glut.glutSolidSphere(tn.size, 10, 10);
+//				glut.glutSolidSphere(tn.size, 10, 10);
+				sphere.render(gl, color);
 				drawedNodes++;
-				gl.glColor3f(1, 1, 1);
+//				gl.glColor3f(1, 1, 1);
 
 				if (tn.showLabel) {
 					tr.begin3DRendering();
@@ -307,10 +311,10 @@ public class Tree extends AbstractGraph {
 				}
 				gl.glPopMatrix();
 
-				gl.glDisable(GL2.GL_LIGHTING);
-				gl.glDisable(GL2.GL_LIGHT0);
-				gl.glEnable(GL2.GL_LIGHTING);
-				gl.glEnable(GL2.GL_LIGHT0);
+//				gl.glDisable(GL2.GL_LIGHTING);
+//				gl.glDisable(GL2.GL_LIGHT0);
+//				gl.glEnable(GL2.GL_LIGHTING);
+//				gl.glEnable(GL2.GL_LIGHT0);
 
 				if (tn.showSubtree) {
 					for (TreeEdge e : struct.get(tn).posts) {

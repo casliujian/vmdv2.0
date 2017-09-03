@@ -10,6 +10,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 import vmdv.config.GraphConfig.GraphType;
 import vmdv.dev.AssistAffect;
+import vmdv.ui.Sphere;
 
 public abstract class AbstractGraph {
 	public abstract GraphType getType();
@@ -27,7 +28,7 @@ public abstract class AbstractGraph {
 	public abstract void removeEdge(String fromId, String toId);
 	public abstract AbstractNode getNearestNode(double x, double y, double z);
 	public abstract void clearColor();
-	public abstract void render(GL2 gl, GLUT glut, TextRenderer tr);
+	public abstract void render(GL2 gl, GLUT glut, TextRenderer tr, Sphere sphere);
 	public abstract AssistAffect parseJSON(JSONObject json);
 
 }
