@@ -10,12 +10,13 @@ import vmdv.model.XYZ;
 public class ForceAtlas2Layout extends GraphLayout {
 	private float ka = 5f;
 	private float kr = 60f;
-	private int maxRunningThread = 1;
-	private int currentRunningThread = 0;
+//	private int maxRunningThread = 1;
+//	private int currentRunningThread = 0;
+	private boolean threadRunning = false;
 
 	@Override
 	public void updateLayout(AbstractGraph graph) {
-		if (currentRunningThread > maxRunningThread) {
+		if (threadRunning) {
 			return;
 		} else {
 			LayoutThread lt = new LayoutThread(graph);
@@ -31,7 +32,7 @@ public class ForceAtlas2Layout extends GraphLayout {
 		}
 		@Override
 		public void run() {
-			ForceAtlas2Layout.this.currentRunningThread++;
+			ForceAtlas2Layout.this.threadRunning = true;
 			if (graph.getStart() == null) {
 				return;
 			}
@@ -84,7 +85,7 @@ public class ForceAtlas2Layout extends GraphLayout {
 				sn.setForce(0, 0, 0);
 			}
 			graph.getStart().setXYZ(0, 0, 0);
-			ForceAtlas2Layout.this.currentRunningThread--;
+			ForceAtlas2Layout.this.threadRunning = false;
 		}
 		
 	}
