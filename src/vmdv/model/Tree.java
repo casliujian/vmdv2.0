@@ -32,6 +32,7 @@ public class Tree extends AbstractGraph {
 	private HashMap<TreeNode, TreeEdges> struct = new HashMap<TreeNode, TreeEdges>();
 	private TreeNode root;
 	private Random random = new Random();
+	private TreeNode preRoot;
 
 	public Tree() {
 		this.struct = new HashMap<TreeNode, TreeEdges>();
@@ -39,6 +40,15 @@ public class Tree extends AbstractGraph {
 
 	public TreeNode getRoot() {
 		return root;
+	}
+	
+	public void setNewRoot(TreeNode tn) {
+		this.preRoot = root;
+		this.root = tn;
+	}
+	
+	public void resetRoot() {
+		this.root = preRoot;
 	}
 
 	public void removeSubtree(String id) {
@@ -170,6 +180,7 @@ public class Tree extends AbstractGraph {
 		TreeEdges tes = new TreeEdges();
 		if (struct.isEmpty()) {
 			root = tn;
+			preRoot = tn;
 		}
 		struct.put(tn, tes);
 		tn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -184,6 +195,7 @@ public class Tree extends AbstractGraph {
 		TreeEdges tes = new TreeEdges();
 		if (struct.isEmpty()) {
 			root = tn;
+			preRoot = tn;
 		}
 		struct.put(tn, tes);
 		tn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
@@ -303,6 +315,7 @@ public class Tree extends AbstractGraph {
 					tr.flush();
 					tr.end3DRendering();
 				}
+				
 				if (tn.showChildLabel) {
 					tr.begin3DRendering();
 					tr.draw3D(tn.childLabel, 0, 0, 0, 0.01f);
@@ -311,12 +324,7 @@ public class Tree extends AbstractGraph {
 				}
 				gl.glPopMatrix();
 
-//				gl.glDisable(GL2.GL_LIGHTING);
-//				gl.glDisable(GL2.GL_LIGHT0);
-//				gl.glEnable(GL2.GL_LIGHTING);
-//				gl.glEnable(GL2.GL_LIGHT0);
-
-				if (tn.showSubtree) {
+				if (tn.subtreeVisible) {
 					for (TreeEdge e : struct.get(tn).posts) {
 						TreeNode ton = e.to;
 						if (ton.visible) {

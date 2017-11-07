@@ -27,15 +27,6 @@ public class HighlightNodeAffect extends AssistAffect {
 			node.picked = true;
 			RGBColor color = ColorConfig.red;
 			node.color = new RGBColor(color.getRed(), color.getGreen(), color.getBlue());
-			/*
-			int index = 1;
-			for(TreeNode tn : tree.children((TreeNode)node)) {
-				tn.showChildLabel = true;
-				tn.color = color;
-				tn.childLabel = "     Child "+index;
-				index++;
-			}
-			*/
 			session.addRequestMsg(new HighlightNodeRequest(node.id));
 		} else if(graph instanceof DiGraph) {
 			node.picked = true;
@@ -44,8 +35,6 @@ public class HighlightNodeAffect extends AssistAffect {
 		}
 		Viewer viewer = session.getViewer();
 		viewer.setStatusStr(node.label);
-		
-
 	}
 
 }

@@ -26,6 +26,9 @@ public class SearchPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String searchText = textField.getText().trim();
 				String[] searchTexts = searchText.split(":");
+//				if(searchTexts.length == 1) {
+//					viewer.search({"", searchTexts[0]});
+//				}
 				viewer.search(searchTexts);
 			}
 		});

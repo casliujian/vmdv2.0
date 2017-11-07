@@ -60,36 +60,12 @@ public class Session {
 		return graph;
 	}
 
-//	private class LayoutThread implements Runnable {
-//		private boolean running = true;
-//
-//		@Override
-//		public void run() {
-//			while (running) {
-//				while (!responses.isEmpty()) {
-//					ResponseMsg rmsg = responses.poll();
-//					if (rmsg != null) {
-//						AssistAffect affect = rmsg.parse();
-//						if (affect != null) {
-//							viewer.affect.addLast(affect);
-//						}
-//					}
-//				}
-//				layout.updateLayout(graph);
-//			}
-//		}
-//
-//	}
-
 	public void parseResponseMsg(JSONObject json) {
-//		if (rmsg != null) {
-//			responses.add(rmsg);
-//		}
 		switch(json.getString("type")) {
 		case "feedback":
 			switch(json.getString("status")) {
 			case "OK":
-				System.out.println("feedback received: OK");
+//				System.out.println("feedback received: OK");
 				break;
 			case "Fail":
 				System.out.println("feedback received: Fail \n"+(json.getString("error_msg")));
@@ -99,7 +75,7 @@ public class Session {
 		default:	
 			AssistAffect affect = graph.parseJSON(json);
 			if (affect != null) {
-				System.out.println("Adding an affect in session "+this.sid);
+//				System.out.println("Adding an affect in session "+this.sid);
 				viewer.affect.addLast(affect);
 			}
 		}

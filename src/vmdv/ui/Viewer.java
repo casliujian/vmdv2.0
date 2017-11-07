@@ -28,7 +28,6 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
-import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -42,11 +41,13 @@ import vmdv.model.AbstractGraph;
 import vmdv.model.AbstractNode;
 //import vmdv.model.NodeProperty;
 import vmdv.model.NodeProperty;
+import vmdv.model.Tree;
+import vmdv.model.TreeNode;
 
 public class Viewer extends JFrame {
 	private GLU glu = new GLU();
 	private GLUT glut = new GLUT();
-	
+
 	private GLCanvas renderPanel;
 	private SearchPanel searchPanel;
 	private JPanel statusPanel;
@@ -58,9 +59,9 @@ public class Viewer extends JFrame {
 	private MouseListener mouseListener;
 	private MouseWheelListener mwListener;
 	private MouseMotionListener mmListener;
-	
+
 	protected AbstractGraph graph;
-	
+
 	protected double eyex = 0;
 	protected double eyey = 0;
 	protected double eyez = 5;
@@ -72,26 +73,26 @@ public class Viewer extends JFrame {
 	protected boolean popupShowed = false;
 	protected Point mousePosition = null;
 	protected boolean singleSelection = true;
-	
-	
-	protected AbstractNode hoverNode = null;
+
+	public AbstractNode hoverNode = null;
 	protected NodeProperty hoverNodeState = null;
-//	protected AbstractNode nodeSelected = null;
-//	protected NodeProperty hoverNodeState = null;
+	// protected AbstractNode nodeSelected = null;
+	// protected NodeProperty hoverNodeState = null;
 	protected Set<AbstractNode> nodesSelected = new HashSet<AbstractNode>();
-//	protected AbstractNode nodeFocused = null;
-//	protected LinkedList<NodeProperty> multiNodesSelectedState = new LinkedList<NodeProperty>();
+	// protected AbstractNode nodeFocused = null;
+	// protected LinkedList<NodeProperty> multiNodesSelectedState = new
+	// LinkedList<NodeProperty>();
 	protected GraphLayout layout;
 	protected Session session;
-	
-//	protected boolean multiSelection = false;
-	
+
+	// protected boolean multiSelection = false;
+
 	public Viewer(String title) {
 		this.setTitle(title);
 		GLProfile glp = GLProfile.get(GLProfile.GL2);
 		GLCapabilities glcaps = new GLCapabilities(glp);
 		glcaps.setDoubleBuffered(true);
-//		this.renderPanel = new GLJPanel(glcaps);
+		// this.renderPanel = new GLJPanel(glcaps);
 		this.renderPanel = new GLCanvas(glcaps);
 		this.add(renderPanel);
 		this.backPop = new JPopupMenu();
@@ -103,48 +104,105 @@ public class Viewer extends JFrame {
 		this.getContentPane().add(statusPanel, BorderLayout.SOUTH);
 		this.searchPanel = new SearchPanel(this);
 		this.getContentPane().add(searchPanel, BorderLayout.NORTH);
-//		glistener.
-//		this.renderPanel.addm
+		// glistener.
+		// this.renderPanel.addm
 	}
-	
+
 	public void search(String[] searchTexts) {
-		Pattern p = Pattern.compile(searchTexts[1].trim());
-		switch (searchTexts[0].trim()) {
+		Pattern p;
+		String searchType="";
+		String searchPattern="";
+		if (searchTexts.length == 1) {
+			p = Pattern.compile(searchTexts[0].trim());
+			searchPattern = searchTexts[0].trim();
+		} else {
+			p = Pattern.compile(searchTexts[1].trim());
+			searchType = searchTexts[0].trim();
+			searchPattern = searchTexts[1].trim();
+		}
+
+		switch (searchType) {
 		case "":
-			for (AbstractNode node: graph.getNodes()) {
-				if (node.label.matches(searchTexts[1].trim())) {
-					PickNodeAffect pna = new PickNodeAffect(node);
-					this.affect.addLast(pna);
+			if (graph instanceof Tree) {
+				LinkedList<TreeNode> looked = new LinkedList<TreeNode>();
+				Tree tree = (Tree) graph;
+				looked.addLast(tree.getRoot());
+				while (!looked.isEmpty()) {
+					TreeNode node = looked.removeFirst();
+					if (!node.visible) {
+						continue;
+					}
+					Matcher m = p.matcher(node.label);
+
+					// System.out.println(m.matches());
+					try {
+						if (new String(node.label.getBytes(), "UTF-8")
+								.matches(new String(searchPattern.getBytes(), "UTF-8"))) {
+							HighlightNodeAffect hna = new HighlightNodeAffect(node);
+							this.affect.addLast(hna);
+						} else {
+							System.out.println(node.label + " doesn't match " + searchTexts[1].trim());
+						}
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					for (TreeNode next : tree.children(node)) {
+						looked.addLast(next);
+					}
+				}
+			} else {
+				for (AbstractNode node : graph.getNodes()) {
+					if (!node.visible) {
+						continue;
+					}
+					Matcher m = p.matcher(node.label);
+
+					System.out.println(m.matches());
+					try {
+						if (new String(node.label.getBytes(), "UTF-8")
+								.matches(new String(searchPattern.getBytes(), "UTF-8"))) {
+							HighlightNodeAffect hna = new HighlightNodeAffect(node);
+							this.affect.addLast(hna);
+						} else {
+							System.out.println(node.label + " doesn't match " + searchTexts[1].trim());
+						}
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			break;
 		case "node":
 			int count = 0;
-			for (AbstractNode node: graph.getNodes()) {
+			for (AbstractNode node : graph.getNodes()) {
+				if (!node.visible) {
+					continue;
+				}
 				Matcher m = p.matcher(node.label);
-				
+
 				System.out.println(m.matches());
 				try {
-					if (new String(node.label.getBytes(), "UTF-8").matches(new String(searchTexts[1].trim().getBytes(), "UTF-8"))) {
-						
-						
+					if (new String(node.label.getBytes(), "UTF-8")
+							.matches(new String(searchPattern.trim().getBytes(), "UTF-8"))) {
 						HighlightNodeAffect hna = new HighlightNodeAffect(node);
 						this.affect.addLast(hna);
 						count++;
-					}else {
-						System.out.println(node.label+" doesn't match "+searchTexts[1].trim());
+					} else {
+						System.out.println(node.label + " doesn't match " + searchPattern);
 					}
 				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			System.out.println(searchTexts[1].trim()+" match "+count+" nodes in "+(graph.getNodes().size()));
+			System.out.println(searchPattern + " match " + count + " nodes in " + (graph.getNodes().size()));
 			break;
 		case "from":
-			for (AbstractNode node: graph.getNodes()) {
+			for (AbstractNode node : graph.getNodes()) {
+				if (!node.visible) {
+					continue;
+				}
 				if (node.label.matches(searchTexts[1].trim())) {
-					for (AbstractNode toNode: graph.getSuccessors(node)) {
+					for (AbstractNode toNode : graph.getSuccessors(node)) {
 						PickNodeAffect pna = new PickNodeAffect(toNode);
 						this.affect.addLast(pna);
 					}
@@ -152,9 +210,12 @@ public class Viewer extends JFrame {
 			}
 			break;
 		case "to":
-			for (AbstractNode node: graph.getNodes()) {
-				if (node.label.matches(searchTexts[1].trim())) {
-					for (AbstractNode fromNode: graph.getSuccessors(node)) {
+			for (AbstractNode node : graph.getNodes()) {
+				if (!node.visible) {
+					continue;
+				}
+				if (node.label.matches(searchPattern)) {
+					for (AbstractNode fromNode : graph.getSuccessors(node)) {
 						PickNodeAffect pna = new PickNodeAffect(fromNode);
 						this.affect.addLast(pna);
 					}
@@ -163,25 +224,25 @@ public class Viewer extends JFrame {
 			break;
 		}
 	}
-	
+
 	public void setStatusStr(String str) {
 		this.statusLabel.setText(str);
 		this.statusStrEmpty = false;
 	}
-	
+
 	public void clearStatusStr() {
-//		this.statusLabel.setText("str");
+		// this.statusLabel.setText("str");
 		this.statusStrEmpty = true;
 	}
-	
+
 	public void setStatusStrIfEmpty(String str) {
 		if (this.statusStrEmpty) {
 			this.statusLabel.setText(str);
 		}
 	}
-	
+
 	public void addBackgroundPopup(PopupItem pop) {
-		if(pop != null) {
+		if (pop != null) {
 			JMenuItem item = new JMenuItem(pop.getLabel());
 			item.addActionListener(new ActionListener() {
 
@@ -189,14 +250,14 @@ public class Viewer extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					pop.action(Viewer.this.session);
 				}
-				
+
 			});
 			this.backPop.add(item);
 		}
 	}
-	
+
 	public void addNodePopup(PopupItem pop) {
-		if(pop != null) {
+		if (pop != null) {
 			JMenuItem item = new JMenuItem(pop.getLabel());
 			item.addActionListener(new ActionListener() {
 
@@ -204,33 +265,34 @@ public class Viewer extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					pop.action(Viewer.this.session);
 				}
-				
+
 			});
 			this.nodePop.add(item);
 		}
 	}
-	
+
 	public Set<AbstractNode> getSelectedNode() {
 		return nodesSelected;
 	}
-	
+
 	public void setGraphLayout(GraphLayout layout) {
 		this.layout = layout;
 	}
-	
+
 	public void setSession(Session session) {
 		this.session = session;
 	}
-	
+
 	public void setEye(double x, double y, double z) {
 		eyex = x;
 		eyey = y;
 		eyez = z;
 	}
-	
+
 	public AbstractGraph getGraph() {
 		return graph;
 	}
+
 	public void setGraph(AbstractGraph graph) {
 		this.graph = graph;
 	}
@@ -238,40 +300,40 @@ public class Viewer extends JFrame {
 	public void refreshGLPanel() {
 		renderPanel.repaint();
 	}
-	
+
 	public void registerGLHandler(GLEventHandler glistener) {
-//		glistener.setGraph(this.getGraph());
+		// glistener.setGraph(this.getGraph());
 		glistener.glu = glu;
 		glistener.glut = glut;
 		glistener.setViewer(this);
 		this.glistener = glistener;
 		renderPanel.addGLEventListener(glistener);
 	}
-	
+
 	public void registerKeyHandler(KeyHandler keyHandler) {
 		keyHandler.setViewer(this);
 		this.keyListener = keyHandler;
 		renderPanel.addKeyListener(keyHandler);
 	}
-	
+
 	public void registerMouseHandler(MouseHandler mouseHandler) {
 		mouseHandler.setViewer(this);
 		this.mouseListener = mouseHandler;
 		renderPanel.addMouseListener(mouseHandler);
 	}
-	
+
 	public void registerMouseMotionHandler(MouseMotionHandler mmHandler) {
 		mmHandler.setViewer(this);
 		this.mmListener = mmHandler;
 		renderPanel.addMouseMotionListener(mmHandler);
 	}
-	
+
 	public void registerMouseWheelHandler(MouseWheelHandler mwHandler) {
 		mwHandler.setViewer(this);
 		this.mwListener = mwHandler;
 		renderPanel.addMouseWheelListener(mwHandler);
 	}
-	
+
 	protected AbstractNode selectNode(GL2 gl, Point p) {
 		if (p == null) {
 			return null;
@@ -281,7 +343,7 @@ public class Viewer extends JFrame {
 		IntBuffer viewport = IntBuffer.allocate(4);
 		FloatBuffer bz = FloatBuffer.allocate(1);
 		FloatBuffer objxyz = FloatBuffer.allocate(3);
-		
+
 		gl.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, modelview);
 		gl.glGetFloatv(GL2.GL_PROJECTION_MATRIX, projection);
 		gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport);
@@ -296,18 +358,8 @@ public class Viewer extends JFrame {
 		AbstractNode n = graph.getNearestNode(objxyz.get(0), objxyz.get(1), objxyz.get(2));
 		return n;
 	}
-	
+
 	public void showView() {
 		this.setVisible(true);
 	}
-	
-	
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
-
-
 }

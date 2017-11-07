@@ -1,7 +1,7 @@
 package vmdv.model;
 
 public class TreeNode extends AbstractNode {
-	public boolean showSubtree = true;
+	public boolean subtreeVisible = true;
 	public int depth;
 	public String nodeState;
 	
@@ -16,13 +16,4 @@ public class TreeNode extends AbstractNode {
 		super(id, label);
 		this.nodeState = nodeState;
 	}
-
-//	public int getDepth() {
-//		return depth;
-//	}
-//
-//	public void setDepth(int depth) {
-//		this.depth = depth;
-//	}
-
 }

@@ -64,37 +64,7 @@ public class VMDV {
 
 	public static void main(String[] args) {
 		VMDV vmdv = new VMDV();
-//		Viewer treeViewer = new Viewer("Proof Tree");
-//		GLEventHandler glh = new GLEventHandler();
-//		treeViewer.registerGLHandler(glh);
-//		KeyHandler kh = new KeyHandler();
-//		treeViewer.registerKeyHandler(kh);
-//		MouseHandler mh = new MouseHandler();
-//		treeViewer.registerMouseHandler(mh);
-//		MouseMotionHandler mmh = new MouseMotionHandler();
-//		treeViewer.registerMouseMotionHandler(mmh);
-//		MouseWheelHandler mwh = new MouseWheelHandler();
-//		treeViewer.registerMouseWheelHandler(mwh);
-//		Tree tree = new Tree();
-////		treeViewer.setGraph(tree);
-//		Session session = new Session("s1", tree, treeViewer, new ForceAtlas2Layout());
-////		Messenger messenger = new Messenger(null, null);
-//		vmdv.addSession("s1", session);
-//		session.start();
-//		
-//		Viewer stateViewer = new Viewer("State Graph");
-//		stateViewer.registerGLHandler(new GLEventHandler());
-//		stateViewer.registerKeyHandler(new KeyHandler());
-//		stateViewer.registerMouseHandler(new MouseHandler());
-//		stateViewer.registerMouseMotionHandler(new MouseMotionHandler());
-//		stateViewer.registerMouseWheelHandler(new MouseWheelHandler());
-//		DiGraph graph = new DiGraph();
-//		Session session2 = new Session("s2", graph, stateViewer, new ForceAtlas2Layout());
-//		vmdv.addSession("s2", session2);
-//		session2.start();
-		
 		vmdv.startMessenger();
-		
 	}
 
 }

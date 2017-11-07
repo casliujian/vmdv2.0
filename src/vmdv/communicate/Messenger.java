@@ -10,9 +10,14 @@ import vmdv.control.ForceAtlas2Layout;
 import vmdv.control.Session;
 import vmdv.control.VMDV;
 import vmdv.dev.popup.ClearColorPopup;
+import vmdv.dev.popup.FocusSubtreePopup;
 import vmdv.dev.popup.HideAllLabelsPopup;
+import vmdv.dev.popup.HighlightAncestorsPopup;
+import vmdv.dev.popup.HighlightSubtreePopup;
 import vmdv.dev.popup.ResetEyePopup;
 import vmdv.dev.popup.ShowAllLabelsPopup;
+import vmdv.dev.popup.ShowAllNodesPopup;
+import vmdv.dev.popup.ShowHideSubtreePopup;
 import vmdv.model.DiGraph;
 import vmdv.model.Tree;
 import vmdv.ui.GLEventHandler;
@@ -53,7 +58,7 @@ public class Messenger {
 //				}
 				JSONObject json = vmdv.takeRequestMsg();
 				if(json != null) {
-					System.out.println("Sending: "+json.toString());
+//					System.out.println("Sending: "+json.toString());
 					output.println(json.toString());
 					output.flush();
 				}
@@ -78,7 +83,7 @@ public class Messenger {
 				try {
 					
 					String str = input.readLine();
-					System.out.println("JSON received: "+str+"---");
+//					System.out.println("JSON received: "+str+"---");
 					JSONObject json = new JSONObject(str);
 					switch(json.getString("type")) {
 					case "create_session":
@@ -91,6 +96,13 @@ public class Messenger {
 							treeViewer.addBackgroundPopup(new ResetEyePopup("Reset Eye Position"));
 							treeViewer.addBackgroundPopup(new ShowAllLabelsPopup("Show All Labels"));
 							treeViewer.addBackgroundPopup(new HideAllLabelsPopup("Hide All Labels"));
+							treeViewer.addBackgroundPopup(new ShowAllNodesPopup("Show All Nodes"));
+							
+							treeViewer.addNodePopup(new HighlightSubtreePopup("Highlight Subtree"));
+							treeViewer.addNodePopup(new HighlightAncestorsPopup("Highlight Ancestors"));
+							treeViewer.addNodePopup(new ShowHideSubtreePopup("Show/Hide Subtree"));
+							treeViewer.addNodePopup(new FocusSubtreePopup("Set as Root"));
+							
 							
 							GLEventHandler glh = new GLEventHandler();
 							treeViewer.registerGLHandler(glh);
@@ -133,7 +145,7 @@ public class Messenger {
 						}
 					default: {
 							String sid = json.getString("session_id");
-							System.out.println("Session "+sid+" parsing message.");
+//							System.out.println("Session "+sid+" parsing message.");
 							Session session = vmdv.getSession(sid);
 							session.parseResponseMsg(json);
 						}
