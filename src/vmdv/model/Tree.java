@@ -19,6 +19,7 @@ import vmdv.config.GraphConfig.GraphType;
 import vmdv.dev.AssistAffect;
 import vmdv.dev.affects.AddEdgeAffect;
 import vmdv.dev.affects.AddNodeAffect;
+import vmdv.dev.affects.ChangeNodeStateAffect;
 import vmdv.dev.affects.ClearColorAffect;
 import vmdv.dev.affects.HighlightNodeAffect;
 import vmdv.dev.affects.RemoveEdgeAffect;
@@ -41,12 +42,12 @@ public class Tree extends AbstractGraph {
 	public TreeNode getRoot() {
 		return root;
 	}
-	
+
 	public void setNewRoot(TreeNode tn) {
 		this.preRoot = root;
 		this.root = tn;
 	}
-	
+
 	public void resetRoot() {
 		this.root = preRoot;
 	}
@@ -126,8 +127,31 @@ public class Tree extends AbstractGraph {
 		float db = toColor.getBlue() - fromColor.getBlue();
 
 		for (TreeNode tn : this.struct.keySet()) {
-			tn.oriColor = (new RGBColor(fromColor.getRed() + dr * tn.depth / height,
-					fromColor.getGreen() + dg * tn.depth / height, fromColor.getBlue() + db * tn.depth / height));
+			System.out.println("updateDepthColor: nodeid: "+tn.id+" state: "+tn.nodeState);
+			if(tn.nodeState.equals("Proved")) {
+				tn.oriColor = (new RGBColor(fromColor.getRed() + dr * tn.depth / height,
+						fromColor.getGreen() + dg * tn.depth / height, fromColor.getBlue() + db * tn.depth / height));
+			} else {
+				tn.oriColor = tn.oriColorOfState(tn.nodeState);
+			}
+//			switch (tn.nodeState) {
+//			case "Not_proved":
+//				tn.oriColor = ColorConfig.colorNotProved;
+//				break;
+//			case "Admitted":
+//				tn.oriColor = ColorConfig.colorAdmitted;
+//				break;
+//			case "Chosen":
+//				tn.oriColor = ColorConfig.colorChosen;
+//				break;
+//			case "To_be_chosen":
+//				tn.oriColor = ColorConfig.colorToBeChosen;
+//				break;
+//			default:
+//				
+//				break;
+//			}
+
 		}
 		if (root != null) {
 			root.oriColor = ColorConfig.rootColor;
@@ -173,10 +197,10 @@ public class Tree extends AbstractGraph {
 	@Override
 	public void addNode(String id, String label) {
 		TreeNode tmp_n = (TreeNode) getNode(id);
-		if(tmp_n != null) {
+		if (tmp_n != null) {
 			return;
 		}
-		TreeNode tn = new TreeNode(id, label);
+		TreeNode tn = new TreeNode(id, label, null);
 		TreeEdges tes = new TreeEdges();
 		if (struct.isEmpty()) {
 			root = tn;
@@ -188,7 +212,7 @@ public class Tree extends AbstractGraph {
 
 	public void addNode(String id, String label, String proofState) {
 		TreeNode tmp_n = (TreeNode) getNode(id);
-		if(tmp_n != null) {
+		if (tmp_n != null) {
 			return;
 		}
 		TreeNode tn = new TreeNode(id, label, proofState);
@@ -199,7 +223,7 @@ public class Tree extends AbstractGraph {
 		}
 		struct.put(tn, tes);
 		tn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
-		
+
 	}
 
 	@Override
@@ -218,11 +242,12 @@ public class Tree extends AbstractGraph {
 		if (height < fnDepth + 1) {
 			height = fnDepth + 1;
 		}
+//		updateNodeState(fn);
 		updateDepthColor();
 		fn.clearColor();
 		tn.clearColor();
 	}
-	
+
 	public void addEdge(String fromId, String toId, String label) {
 		// super.addEdge(fromId, toId);
 		TreeNode fn = (TreeNode) getNode(fromId);
@@ -238,10 +263,32 @@ public class Tree extends AbstractGraph {
 		if (height < fnDepth + 1) {
 			height = fnDepth + 1;
 		}
+//		updateNodeState(fn);
 		updateDepthColor();
 		fn.clearColor();
 		tn.clearColor();
 	}
+
+//	public void updateNodeState(TreeNode fn) {
+//		String newState = "Proved";
+//		for (TreeEdge te : struct.get(fn).posts) {
+//			TreeNode tn = te.to;
+//			if (tn.nodeState == "Not_proved") {
+//				fn.nodeState = "Not_proved";
+//				break;
+//			} else if (tn.nodeState == "Admitted") {
+//				fn.nodeState = "Admitted";
+//				break;
+//			}
+//		}
+//		if (fn == root) {
+//			return;
+//		}
+//		TreeNode parent = this.parent(fn);
+//		if (parent != null) {
+//			updateNodeState(parent);
+//		}
+//	}
 
 	@Override
 	public void removeNode(String id) {
@@ -287,8 +334,8 @@ public class Tree extends AbstractGraph {
 
 	@Override
 	public void render(GL2 gl, GLUT glut, TextRenderer tr, Sphere sphere) {
-//		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-//		gl.glLoadIdentity();
+		// gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+		// gl.glLoadIdentity();
 		LinkedList<TreeNode> painting = new LinkedList<TreeNode>();
 		painting.addLast(root);
 		int drawedNodes = 0;
@@ -299,15 +346,16 @@ public class Tree extends AbstractGraph {
 				return;
 			}
 			if (tn.visible) {
-				drawedNodes ++;
+				drawedNodes++;
 				RGBColor color = tn.color;
 				gl.glPushMatrix();
-//				gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+				// gl.glColor3f(color.getRed(), color.getGreen(),
+				// color.getBlue());
 				gl.glTranslated(tn.xyz.getX(), tn.xyz.getY(), tn.xyz.getZ());
-//				glut.glutSolidSphere(tn.size, 10, 10);
+				// glut.glutSolidSphere(tn.size, 20, 20);
 				sphere.render(gl, color);
 				drawedNodes++;
-//				gl.glColor3f(1, 1, 1);
+				// gl.glColor3f(1, 1, 1);
 
 				if (tn.showLabel) {
 					tr.begin3DRendering();
@@ -315,7 +363,7 @@ public class Tree extends AbstractGraph {
 					tr.flush();
 					tr.end3DRendering();
 				}
-				
+
 				if (tn.showChildLabel) {
 					tr.begin3DRendering();
 					tr.draw3D(tn.childLabel, 0, 0, 0, 0.01f);
@@ -344,7 +392,8 @@ public class Tree extends AbstractGraph {
 				}
 			}
 		}
-//		System.out.println("Total nodes: "+struct.keySet().size()+", Drawn nodes: "+drawedNodes);
+		// System.out.println("Total nodes: "+struct.keySet().size()+", Drawn
+		// nodes: "+drawedNodes);
 	}
 
 	@Override
@@ -404,10 +453,15 @@ public class Tree extends AbstractGraph {
 		switch (json.getString("type")) {
 		case "add_node": {
 			JSONObject json_node = json.getJSONObject("node");
-			return new AddNodeAffect(json_node.getString("id"), json_node.getString("label"), json_node.getString("state"));
-//			break;
+			return new AddNodeAffect(json_node.getString("id"), json_node.getString("label"),
+					json_node.getString("state"));
+			// break;
 		}
-		case "remove_node": 
+		case "change_node_state": {
+			System.out.println("Changing state of node "+json.getString("node_id")+" to "+json.getString("new_state"));
+			return new ChangeNodeStateAffect(json.getString("node_id"), json.getString("new_state"));
+		}
+		case "remove_node":
 			return new RemoveNodeAffect(json.getString("node_id"));
 		case "add_edge": {
 			return new AddEdgeAffect(json.getString("from_id"), json.getString("to_id"), json.getString("label"));
@@ -417,12 +471,12 @@ public class Tree extends AbstractGraph {
 		case "highlight_node": {
 			return new HighlightNodeAffect(getNode(json.getString("node_id")));
 		}
-		case "unhighlight_node" :
+		case "unhighlight_node":
 			return new UnHighlightNodeAffect(getNode(json.getString("node_id")));
-		case "clear_color": 
+		case "clear_color":
 			return new ClearColorAffect();
 		default:
-			System.out.println("Message type not known: "+json.getString("type"));
+			System.out.println("Message type not known: " + json.getString("type"));
 		}
 		return null;
 	}

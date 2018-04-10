@@ -39,8 +39,8 @@ import vmdv.dev.affects.HighlightNodeAffect;
 import vmdv.dev.affects.PickNodeAffect;
 import vmdv.model.AbstractGraph;
 import vmdv.model.AbstractNode;
-//import vmdv.model.NodeProperty;
-import vmdv.model.NodeProperty;
+//import vmdv.model.Property;
+import vmdv.model.Property;
 import vmdv.model.Tree;
 import vmdv.model.TreeNode;
 
@@ -75,13 +75,13 @@ public class Viewer extends JFrame {
 	protected boolean singleSelection = true;
 
 	public AbstractNode hoverNode = null;
-	protected NodeProperty hoverNodeState = null;
+//	protected Property hoverNodeState = null;
 	// protected AbstractNode nodeSelected = null;
-	// protected NodeProperty hoverNodeState = null;
+	// protected Property hoverNodeState = null;
 	protected Set<AbstractNode> nodesSelected = new HashSet<AbstractNode>();
 	// protected AbstractNode nodeFocused = null;
-	// protected LinkedList<NodeProperty> multiNodesSelectedState = new
-	// LinkedList<NodeProperty>();
+	// protected LinkedList<Property> multiNodesSelectedState = new
+	// LinkedList<Property>();
 	protected GraphLayout layout;
 	protected Session session;
 

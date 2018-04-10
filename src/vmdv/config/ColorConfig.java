@@ -18,4 +18,8 @@ public interface ColorConfig {
 	public static final RGBColor toColor = new RGBColor(0,1,0);
 	public static final RGBColor same_subtree_color = new RGBColor(199.0f/255, 134.0f/255, 5.0f/255);
 	public static final RGBColor childColor = new RGBColor(183.0f/255,143.0f/255,71.0f/255);
+	public static final RGBColor colorNotProved = new RGBColor(164.0f/255, 177.0f/255, 37.0f/255);
+	public static final RGBColor colorAdmitted = new RGBColor(58.0f/255, 156.0f/255, 147.0f/255);
+	public static final RGBColor colorChosen = new RGBColor(1,0,0);
+	public static final RGBColor colorToBeChosen = hoverColor;
 }

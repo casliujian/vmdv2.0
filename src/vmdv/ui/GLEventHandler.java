@@ -11,8 +11,8 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 import vmdv.config.ColorConfig;
 import vmdv.model.AbstractNode;
-//import vmdv.model.NodeProperty;
-import vmdv.model.NodeProperty;
+//import vmdv.model.Property;
+import vmdv.model.Property;
 
 public class GLEventHandler implements GLEventListener {
 
@@ -51,31 +51,38 @@ public class GLEventHandler implements GLEventListener {
 
 		viewer.graph.render(gl, glut, tr, sphere);
 
-		
-		
 		if (!viewer.popupShowed) {
 			AbstractNode sn = viewer.selectNode(gl, viewer.mousePosition);
-			if (sn != null) {
-				if (!sn.picked) {
-					AbstractNode oldHoverNode = viewer.hoverNode;
-					if (oldHoverNode != null) {
-						oldHoverNode.color = viewer.hoverNodeState.getColor();
-						oldHoverNode.size = viewer.hoverNodeState.getSize();
-					}
-					viewer.hoverNode = sn;
-					NodeProperty ns = new NodeProperty(sn.color, sn.size);
-					viewer.hoverNodeState = ns;
-					sn.color = (ColorConfig.hoverColor);
-					sn.size = (ns.getSize() * 1.2);
-				}
-			} else {
-				AbstractNode oldHoverNode = viewer.hoverNode;
-				if (oldHoverNode != null && !oldHoverNode.picked) {
-					oldHoverNode.color = viewer.hoverNodeState.getColor();
-					oldHoverNode.size = viewer.hoverNodeState.getSize();
-				}
-				viewer.hoverNode = sn;
+			if (sn != viewer.hoverNode && viewer.hoverNode != null) {
+				viewer.hoverNode.outOfStay();
 			}
+			if (sn != null) {
+				sn.stayOn();
+//				viewer.hoverNode = sn;
+			}
+			viewer.hoverNode = sn;
+			
+//			if (sn != null) {
+//				if (!sn.picked) {
+//					AbstractNode oldHoverNode = viewer.hoverNode;
+//					if (oldHoverNode != null) {
+//						oldHoverNode.color = viewer.hoverNodeState.getColor();
+//						oldHoverNode.size = viewer.hoverNodeState.getSize();
+//					}
+//					viewer.hoverNode = sn;
+//					Property ns = new Property(sn.color, sn.size);
+//					viewer.hoverNodeState = ns;
+//					sn.color = (ColorConfig.hoverColor);
+//					sn.size = (ns.getSize() * 1.2);
+//				}
+//			} else {
+//				AbstractNode oldHoverNode = viewer.hoverNode;
+//				if (oldHoverNode != null && !oldHoverNode.picked) {
+//					oldHoverNode.color = viewer.hoverNodeState.getColor();
+//					oldHoverNode.size = viewer.hoverNodeState.getSize();
+//				}
+//				viewer.hoverNode = sn;
+//			}
 		}
 
 		// show color, label or else
@@ -183,7 +190,7 @@ public class GLEventHandler implements GLEventListener {
 //		}
 		this.setCamera(gld);
 		
-		this.sphere = new Sphere(24, 24);
+		this.sphere = new Sphere(50, 50);
 		sphere.initGL(gl);
 
 		this.time = System.currentTimeMillis();
@@ -223,10 +230,4 @@ public class GLEventHandler implements GLEventListener {
 //		gl.glLoadIdentity();
 
 	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

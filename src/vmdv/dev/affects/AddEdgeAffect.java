@@ -3,6 +3,7 @@ package vmdv.dev.affects;
 import vmdv.control.Session;
 import vmdv.dev.AssistAffect;
 import vmdv.model.AbstractGraph;
+import vmdv.model.Tree;
 
 public class AddEdgeAffect extends AssistAffect {
 	private String fromId;
@@ -18,7 +19,11 @@ public class AddEdgeAffect extends AssistAffect {
 	@Override
 	public void affect(Session session) {
 		AbstractGraph graph = session.getGraph();
-		graph.addEdge(fromId, toId);
+		if(graph instanceof Tree) {
+			((Tree) graph).addEdge(fromId, toId, label);
+		} else {
+			graph.addEdge(fromId, toId);
+		}
 	}
 
 }

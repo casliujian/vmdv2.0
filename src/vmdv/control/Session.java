@@ -70,7 +70,8 @@ public class Session {
 			case "Fail":
 				System.out.println("feedback received: Fail \n"+(json.getString("error_msg")));
 			default:
-				System.out.println("unknown feedback received");
+				System.out.println("unknown feedback received:");
+				System.out.println(json.toString());
 			}
 		default:	
 			AssistAffect affect = graph.parseJSON(json);

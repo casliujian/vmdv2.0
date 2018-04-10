@@ -11,6 +11,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import exceptions.NoSuchProperty;
 import vmdv.config.ColorConfig;
 import vmdv.config.GraphConfig.GraphType;
 import vmdv.dev.AssistAffect;
@@ -27,15 +28,19 @@ public class DiGraph extends AbstractGraph {
 	private HashMap<DiNode, DiEdges> struct = new HashMap<DiNode, DiEdges>();
 	private DiNode start = null;
 	private Random random = new Random();
-	
+
 	@Override
 	public AbstractNode getNode(String id) {
-		if(id == null) {
+		if (id == null) {
 			return null;
 		}
-		for(DiNode dn: struct.keySet()) {
-			if(id.equals(dn.id)) {
-				return dn;
+		for (DiNode dn : struct.keySet()) {
+			try {
+				if (id.equals(dn.defaultProperty.get("id"))) {
+					return dn;
+				}
+			} catch (NoSuchProperty e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
@@ -43,33 +48,34 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public void addNode(String id, String label) {
-		if(getNode(id) != null) {
+		if (getNode(id) != null) {
 			return;
 		}
 		DiNode dn = new DiNode(id, label);
 		DiEdges des = new DiEdges();
 		struct.put(dn, des);
-		if(start == null) {
+		if (start == null) {
 			start = dn;
 		}
 		dn.oriColor = ColorConfig.oriColor;
+//		dn.setOriColor(ColorConfig.oriColor);
 		dn.setXYZ(random.nextDouble(), random.nextDouble(), random.nextDouble());
-		
+
 	}
-	
+
 	private void removeNode(DiNode dn) {
 		DiEdges des = struct.get(dn);
-		for(DiEdge de: des.pres) {
+		for (DiEdge de : des.pres) {
 			DiNode from = de.from;
 			struct.get(from).posts.remove(de);
-			if(isIsolated(from)) {
+			if (isIsolated(from)) {
 				removeNode(from);
 			}
 		}
-		for(DiEdge de: des.posts) {
+		for (DiEdge de : des.posts) {
 			DiNode to = de.to;
 			struct.get(to).pres.remove(de);
-			if(isIsolated(to)) {
+			if (isIsolated(to)) {
 				removeNode(to);
 			}
 		}
@@ -78,7 +84,7 @@ public class DiGraph extends AbstractGraph {
 	@Override
 	public void removeNode(String id) {
 		DiNode dn = (DiNode) getNode(id);
-		if(dn == null) {
+		if (dn == null) {
 			return;
 		} else {
 			removeNode(dn);
@@ -89,7 +95,7 @@ public class DiGraph extends AbstractGraph {
 	public void addEdge(String fromId, String toId) {
 		DiNode from = (DiNode) getNode(fromId);
 		DiNode to = (DiNode) getNode(toId);
-		assert(from != null && to != null);
+		assert (from != null && to != null);
 		DiEdge de = new DiEdge(from, to);
 		struct.get(from).posts.add(de);
 		struct.get(to).pres.add(de);
@@ -99,13 +105,13 @@ public class DiGraph extends AbstractGraph {
 	public void removeEdge(String fromId, String toId) {
 		DiNode from = (DiNode) getNode(fromId);
 		DiNode to = (DiNode) getNode(toId);
-		assert(from != null && to != null);
+		assert (from != null && to != null);
 		struct.get(from).removePostTo(to);
 		struct.get(to).removePreFrom(from);
-		if(isIsolated(from)) {
+		if (isIsolated(from)) {
 			removeNode(from);
 		}
-		if(isIsolated(to)) {
+		if (isIsolated(to)) {
 			removeNode(to);
 		}
 	}
@@ -116,11 +122,17 @@ public class DiGraph extends AbstractGraph {
 		DiNode rn = null;
 
 		for (DiNode n : struct.keySet()) {
-			double tmp_dist = Math.sqrt(
-					Math.pow(n.xyz.getX() - x, 2) + Math.pow(n.xyz.getY() - y, 2) + Math.pow(n.xyz.getZ() - z, 2));
-			if (tmp_dist <= dist) {
-				rn = n;
-				break;
+			XYZ xyz;
+			try {
+				xyz = (XYZ) n.defaultProperty.get("xyz");
+				double tmp_dist = Math
+						.sqrt(Math.pow(xyz.getX() - x, 2) + Math.pow(xyz.getY() - y, 2) + Math.pow(xyz.getZ() - z, 2));
+				if (tmp_dist <= dist) {
+					rn = n;
+					break;
+				}
+			} catch (NoSuchProperty e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -129,11 +141,11 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public void clearColor() {
-		for(DiNode dn: struct.keySet()) {
+		for (DiNode dn : struct.keySet()) {
 			dn.clearColor();
 		}
 	}
-	
+
 	private boolean isIsolated(DiNode dn) {
 		DiEdges des = struct.get(dn);
 		return des.pres.size() == 0 && des.posts.size() == 0;
@@ -141,22 +153,23 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public void render(GL2 gl, GLUT glut, TextRenderer tr, Sphere sphere) {
-//		int drawedNodes = 0;
+		// int drawedNodes = 0;
 		for (DiNode sn : getDiNodes()) {
 			if (!sn.visible) {
 				continue;
 			}
 			gl.glPushMatrix();
-			gl.glTranslated(sn.xyz.getX(), sn.xyz.getY(), sn.xyz.getZ());
+			XYZ xyz = sn.xyz;
+			gl.glTranslated(xyz.getX(), xyz.getY(), xyz.getZ());
 			RGBColor color = sn.color;
-//			gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
-//			glut.glutSolidSphere(sn.size, 15, 15);
+			// gl.glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+			// glut.glutSolidSphere(sn.size, 20, 20);
 			sphere.render(gl, color);
-//			gl.glColor3f(0, 0, 0);
-//			drawedNodes++;
-//			if (drawedNodes >= 2875) {
-//				System.out.println("drawed node "+drawedNodes);
-//			}
+			// gl.glColor3f(0, 0, 0);
+			// drawedNodes++;
+			// if (drawedNodes >= 2875) {
+			// System.out.println("drawed node "+drawedNodes);
+			// }
 
 			gl.glPopMatrix();
 			for (DiEdge se : struct.get(sn).posts) {
@@ -219,7 +232,7 @@ public class DiGraph extends AbstractGraph {
 	@Override
 	public Set<AbstractNode> getSuccessors(String id) {
 		DiNode dn = (DiNode) getNode(id);
-//		assert(dn != null);
+		// assert(dn != null);
 		return getSuccessors(dn);
 	}
 
@@ -232,11 +245,11 @@ public class DiGraph extends AbstractGraph {
 	public Set<DiNode> getDiNodes() {
 		return struct.keySet();
 	}
-	
+
 	@Override
 	public Set<AbstractNode> getNodes() {
 		Set<AbstractNode> nodes = new HashSet<AbstractNode>();
-		for(DiNode tn: getDiNodes()) {
+		for (DiNode tn : getDiNodes()) {
 			nodes.add(tn);
 		}
 		return nodes;
@@ -244,9 +257,9 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public Set<AbstractNode> getSuccessors(AbstractNode an) {
-		assert(an != null);
+		assert (an != null);
 		Set<AbstractNode> succs = new HashSet<AbstractNode>();
-		for(DiEdge de: struct.get(an).posts) {
+		for (DiEdge de : struct.get(an).posts) {
 			succs.add(de.to);
 		}
 		return succs;
@@ -254,9 +267,9 @@ public class DiGraph extends AbstractGraph {
 
 	@Override
 	public Set<AbstractNode> getPredecessors(AbstractNode an) {
-		assert(an != null);
+		assert (an != null);
 		Set<AbstractNode> preds = new HashSet<AbstractNode>();
-		for(DiEdge de: struct.get(an).pres) {
+		for (DiEdge de : struct.get(an).pres) {
 			preds.add(de.from);
 		}
 		return preds;
@@ -273,9 +286,9 @@ public class DiGraph extends AbstractGraph {
 		case "add_node": {
 			JSONObject json_node = json.getJSONObject("node");
 			return new AddNodeAffect(json_node.getString("id"), json_node.getString("label"), null);
-//			break;
+			// break;
 		}
-		case "remove_node": 
+		case "remove_node":
 			return new RemoveNodeAffect(json.getString("node_id"));
 		case "add_edge": {
 			return new AddEdgeAffect(json.getString("from_id"), json.getString("to_id"), null);
@@ -290,10 +303,10 @@ public class DiGraph extends AbstractGraph {
 		case "clear_color":
 			return new ClearColorAffect();
 		default:
-			System.out.println("Message type not known: "+json.getString("type"));
+			System.out.println("Message type not known: " + json.getString("type"));
 		}
 		return null;
-	
+
 	}
 
 }
@@ -301,22 +314,23 @@ public class DiGraph extends AbstractGraph {
 class DiEdges {
 	public Set<DiEdge> pres = new HashSet<DiEdge>();
 	public Set<DiEdge> posts = new HashSet<DiEdge>();
+
 	public void removePostTo(DiNode to) {
-		for(DiEdge de:posts) {
-			if(de.to.equals(to)) {
+		for (DiEdge de : posts) {
+			if (de.to.equals(to)) {
 				posts.remove(de);
 				return;
 			}
 		}
 	}
-	
+
 	public void removePreFrom(DiNode from) {
-		for(DiEdge de: pres) {
-			if(de.from.equals(from)) {
+		for (DiEdge de : pres) {
+			if (de.from.equals(from)) {
 				posts.remove(from);
 				return;
 			}
 		}
 	}
-	
+
 }
